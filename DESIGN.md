@@ -1,0 +1,2 @@
+# Design direction
+Near-black green-tinted canvas, lime/emerald accents, warm-white text, quiet gray secondary text. Geist font, generous two-line hero, 1200px content width, compact navigation, large concept product preview. Product-led imagery is constructed as semantic interface components. Restrained glow, thin borders and generous spacing. GSAP orchestrates entrances and a desktop pinned workflow; Motion powers short interaction transitions. Reduced-motion removes ambient and scroll animation. Mobile layout stacks without pinning. No fake testimonials or metrics.
