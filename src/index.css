@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sky-pale: #E6F2FF;
+  --color-sky-soft: #B3D9FF;
+  --color-sky-mid: #80B3FF;
+  --color-sky-deep: #6699E6;
+  --color-primary: #2F5AA8;
+  --color-primary-deep: #1E3F7A;
+  --color-navy: #0F2A4D;
+  --color-slate-blue: #3A5A8C;
+  --font-sans: "Geist", Arial, sans-serif;
+}
+
+/* Tailwind preflight runs first; legacy layout CSS is imported after this
+   file in main.jsx so existing classNames keep their exact look. */
