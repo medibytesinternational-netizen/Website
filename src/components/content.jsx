@@ -157,12 +157,15 @@ export function ClosingCta({ eyebrow, title, copy, button, to = '/demo' }) {
         poster="/cards-bg.svg"
         autoPlay
         muted
+        defaultMuted
         loop
         playsInline
-        preload="none"
+        preload="metadata"
+        disablePictureInPicture
         aria-hidden="true"
         tabIndex={-1}
         onCanPlay={(e) => {
+          e.currentTarget.muted = true;
           e.currentTarget.classList.add('ready');
           e.currentTarget.play().catch(() => {});
         }}

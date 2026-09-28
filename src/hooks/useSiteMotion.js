@@ -21,10 +21,12 @@ const inGrid = (el) =>
  *  hero parallax, count-ups, progress bar, hovers, FAQ/partnership. */
 export function useSiteMotion({ pinWorkflow = false, scrubVision = false, heroIntro = true } = {}) {
   const ctxRef = useRef(null);
+  const mmRef = useRef(null);
   const stopHoverRef = useRef(() => {});
   const stopCardHoverRef = useRef(() => {});
 
   useEffect(() => {
+    let disposed = false;
     const motionToggle = document.querySelector('#motion-toggle');
     const applyPausedLabel = () => {
       if (!motionToggle) return;
@@ -34,51 +36,60 @@ export function useSiteMotion({ pinWorkflow = false, scrubVision = false, heroIn
 
     const setupAnimations = () => {
       ctxRef.current?.revert();
+      mmRef.current?.revert();
+      mmRef.current = null;
       ScrollTrigger.getAll().forEach((t) => t.kill());
       document.documentElement.classList.toggle('motion-paused', paused);
       applyPausedLabel();
 
-      // Scroll progress bar — user-driven, always on.
-      let bar = document.querySelector('.scroll-progress');
-      if (!bar) {
-        bar = document.createElement('div');
-        bar.className = 'scroll-progress';
-        bar.setAttribute('aria-hidden', 'true');
-        document.body.prepend(bar);
-      }
-      gsap.fromTo(
-        bar,
-        { scaleX: 0 },
-        { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } }
-      );
-
-      if (paused) {
-        // Freeze counters at final values when motion is off.
-        document.querySelectorAll('[data-count]').forEach((el) => {
-          el.textContent = el.getAttribute('data-count');
-        });
-        return;
-      }
+      // Pause background videos when motion is off.
+      document.querySelectorAll('video.hero-sky-video,video.cta-bg-video').forEach((v) => {
+        if (paused) v.pause();
+        else v.play().catch(() => {});
+      });
 
       ctxRef.current = gsap.context(() => {
-        // 1. Hero entrance: masked headline lines, copy, CTAs, product card.
+        // Scroll progress bar — user-driven, always on.
+        let bar = document.querySelector('.scroll-progress');
+        if (!bar) {
+          bar = document.createElement('div');
+          bar.className = 'scroll-progress';
+          bar.setAttribute('aria-hidden', 'true');
+          document.body.prepend(bar);
+        }
+        gsap.fromTo(
+          bar,
+          { scaleX: 0 },
+          { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } }
+        );
+
+        if (paused) {
+          // Freeze counters at final values when motion is off.
+          document.querySelectorAll('[data-count]').forEach((el) => {
+            el.textContent = el.getAttribute('data-count');
+          });
+          return;
+        }
+        // 1. Hero entrance: single sequenced intro (no double with video fade).
+        // Headline lines use opacity-only (no y transform) because they sit
+        // inside an h1 with background-clip:text gradient — transforming
+        // gradient-clipped text ghosts/doubles in Chrome. y-motion lives on
+        // .hero-in / .product-shell wrappers instead. Plays immediately so
+        // reload never flashes then replays (video fades independently).
         if (heroIntro && document.querySelector('.headline-line')) {
-          gsap
-            .timeline({ defaults: { ease: 'power3.out' } })
-            .from('.headline-line', { y: 45, opacity: 0, duration: 1.1, stagger: 0.14 })
-            .from('.hero-in', { y: 18, opacity: 0, duration: 0.75, stagger: 0.1 }, 0.2)
-            .from('.product-shell', { y: 65, opacity: 0, duration: 1.1 }, 0.45);
+          const intro = gsap
+            .timeline({ defaults: { ease: 'power3.out' }, onComplete: () => ScrollTrigger.refresh() })
+            .fromTo('.headline-line', { opacity: 0 }, { opacity: 1, duration: 0.9, stagger: 0.12 })
+            .fromTo('.hero-in', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.75, stagger: 0.1 }, 0.15)
+            .fromTo('.product-shell', { y: 65, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, clearProps: 'transform' }, 0.4);
+          intro.play();
         }
 
-        // 2. Hero parallax: copy drifts up, sky video eases down on scroll.
+        // 2. Hero parallax: copy drifts up on scroll (video transform removed
+        // so CSS opacity fade and GSAP never fight over the same element).
         if (document.querySelector('.hero-full')) {
           gsap.to('.hero-full .hero-inner', {
             y: -70,
-            ease: 'none',
-            scrollTrigger: { trigger: '.hero-full', start: 'top top', end: 'bottom top', scrub: true },
-          });
-          gsap.to('.hero-sky-video', {
-            yPercent: 14,
             ease: 'none',
             scrollTrigger: { trigger: '.hero-full', start: 'top top', end: 'bottom top', scrub: true },
           });
@@ -146,8 +157,8 @@ export function useSiteMotion({ pinWorkflow = false, scrubVision = false, heroIn
         });
 
         if (pinWorkflow && document.querySelector('.workflow-heading')) {
-          const mm = gsap.matchMedia();
-          mm.add('(min-width: 1000px)', () => {
+          mmRef.current = gsap.matchMedia();
+          mmRef.current.add('(min-width: 1000px)', () => {
             ScrollTrigger.create({
               trigger: '.workflow-heading',
               start: 'top 150px',
@@ -213,7 +224,20 @@ export function useSiteMotion({ pinWorkflow = false, scrubVision = false, heroIn
 
     motionToggle?.addEventListener('click', onToggle);
     motionPreference?.addEventListener('change', onPrefChange);
-    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    // Skip refresh while hero intro is playing — intro onComplete refreshes once.
+    const introPlaying = () =>
+      !!document.querySelector('.headline-line') && gsap.isTweening('.headline-line,.hero-in,.product-shell');
+    document.fonts?.ready.then(() => {
+      if (!disposed && !introPlaying()) ScrollTrigger.refresh();
+    });
+    // Refresh triggers once media settles (late video sizing).
+    const onMediaReady = () => {
+      if (!disposed && !introPlaying()) ScrollTrigger.refresh();
+    };
+    document.querySelectorAll('video.hero-sky-video,video.cta-bg-video').forEach((v) => {
+      v.addEventListener('canplay', onMediaReady);
+    });
+    window.addEventListener('load', onMediaReady);
 
     stopHoverRef.current = hover('.button', (element) => {
       if (paused) return;
@@ -246,13 +270,20 @@ export function useSiteMotion({ pinWorkflow = false, scrubVision = false, heroIn
     partnershipButton?.addEventListener('click', onPartner);
 
     return () => {
+      disposed = true;
       motionToggle?.removeEventListener('click', onToggle);
       motionPreference?.removeEventListener('change', onPrefChange);
       details.forEach((d) => d.removeEventListener('toggle', refresh));
       partnershipButton?.removeEventListener('click', onPartner);
+      document.querySelectorAll('video.hero-sky-video,video.cta-bg-video').forEach((v) => {
+        v.removeEventListener('canplay', onMediaReady);
+      });
+      window.removeEventListener('load', onMediaReady);
       stopHoverRef.current?.();
       stopCardHoverRef.current?.();
       ctxRef.current?.revert();
+      mmRef.current?.revert();
+      mmRef.current = null;
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, [pinWorkflow, scrubVision, heroIntro]);

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Activity, ArrowUpRight, ChevronDown, Menu } from 'lucide-react';
 
@@ -32,15 +32,29 @@ const COMPANY_LINKS = [
   ['Our vision', '/vision'],
 ];
 
-function Drop({ label, links, extra }) {
+function Drop({ id, label, links, extra, openDrop, setOpenDrop, closeMobile }) {
+  const open = openDrop === id;
   return (
-    <details className="nav-drop">
-      <summary>
+    <details
+      className="nav-drop"
+      open={open}
+      onToggle={(e) => {
+        // Single-open: opening one closes the other.
+        if (e.target.open) setOpenDrop(id);
+        else if (openDrop === id) setOpenDrop(null);
+      }}
+    >
+      <summary aria-expanded={open} aria-haspopup="true">
         {label} <ChevronDown aria-hidden="true" />
       </summary>
       <div className="nav-panel">
         {links.map(([text, to]) => (
-          <NavLink key={text} to={to}>
+          <NavLink
+            key={text}
+            to={to}
+            onClick={closeMobile}
+            className={({ isActive }) => (isActive ? 'active' : undefined)}
+          >
             {text}
           </NavLink>
         ))}
@@ -50,43 +64,51 @@ function Drop({ label, links, extra }) {
   );
 }
 
-export function Header({ active }) {
+export function Header() {
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openDrop, setOpenDrop] = useState(null);
+  const menuRef = useRef(null);
+  const navRef = useRef(null);
 
+  const closeMobile = () => {
+    setMobileOpen(false);
+    setOpenDrop(null);
+  };
+
+  // Close on route change.
   useEffect(() => {
-    const menu = document.querySelector('.menu-toggle');
-    const nav = document.querySelector('#nav');
-    if (!menu || !nav) return;
-    const closeMenu = () => {
-      menu.setAttribute('aria-expanded', 'false');
-      nav.classList.remove('open');
-      nav.querySelectorAll('.nav-drop[open]').forEach((d) => d.removeAttribute('open'));
-    };
-    const onClick = () => {
-      const open = menu.getAttribute('aria-expanded') !== 'true';
-      menu.setAttribute('aria-expanded', String(open));
-      nav.classList.toggle('open', open);
-    };
+    closeMobile();
+  }, [location.pathname, location.hash]);
+
+  // Escape / outside-click / resize handling.
+  useEffect(() => {
+    if (!mobileOpen && !openDrop) return;
     const onKey = (e) => {
-      if (e.key === 'Escape' && nav.classList.contains('open')) {
-        closeMenu();
-        menu.focus();
+      if (e.key === 'Escape') {
+        closeMobile();
+        menuRef.current?.focus();
       }
     };
-    const onNavClick = (e) => {
-      if (e.target.closest('a')) closeMenu();
+    const onPointer = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target) && !menuRef.current?.contains(e.target)) {
+        closeMobile();
+      }
     };
-    menu.addEventListener('click', onClick);
-    nav.addEventListener('click', onNavClick);
+    const onResize = () => {
+      if (window.innerWidth > 700) setMobileOpen(false);
+    };
     document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointer);
+    window.addEventListener('resize', onResize);
     return () => {
-      menu.removeEventListener('click', onClick);
-      nav.removeEventListener('click', onNavClick);
       document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointer);
+      window.removeEventListener('resize', onResize);
     };
-  }, [location.pathname]);
+  }, [mobileOpen, openDrop]);
 
-  const cls = (page) => (page === active ? 'active' : undefined);
+  const navLinkClass = ({ isActive }) => (isActive ? 'active' : undefined);
 
   return (
     <>
@@ -95,41 +117,51 @@ export function Header({ active }) {
       </a>
       <header className="site-header">
         <div className="nav-wrap">
-          <Link className="brand" to="/" aria-label="MediBytes home">
+          <Link className="brand" to="/" aria-label="MediBytes home" onClick={closeMobile}>
             <Logo />
           </Link>
-          <nav id="nav" aria-label="Main navigation">
-            <NavLink to="/" className={cls('home')} end>
+          <nav id="nav" aria-label="Main navigation" ref={navRef} className={mobileOpen ? 'open' : undefined}>
+            <NavLink to="/" className={navLinkClass} end onClick={closeMobile}>
               Home
             </NavLink>
             <Drop
+              id="products"
               label="Products"
               links={PRODUCT_LINKS}
+              openDrop={openDrop}
+              setOpenDrop={setOpenDrop}
+              closeMobile={closeMobile}
               extra={
                 <>
                   <span className="nav-sep">Overview</span>
-                  <NavLink to="/how-it-works" className={cls('how')}>
+                  <NavLink to="/how-it-works" className={navLinkClass} onClick={closeMobile}>
                     How it works
                   </NavLink>
-                  <NavLink to="/hospitals" className={cls('hospitals')}>
+                  <NavLink to="/hospitals" className={navLinkClass} onClick={closeMobile}>
                     For hospitals
                   </NavLink>
                 </>
               }
             />
-            <Drop label="Company" links={COMPANY_LINKS} />
-            <NavLink to="/#legal" className={cls('legal')}>
-              Legal
-            </NavLink>
+            <Drop
+              id="company"
+              label="Company"
+              links={COMPANY_LINKS}
+              openDrop={openDrop}
+              setOpenDrop={setOpenDrop}
+              closeMobile={closeMobile}
+            />
           </nav>
-          <Link className="button nav-cta" to="/demo">
+          <Link className="button nav-cta" to="/demo" onClick={closeMobile}>
             Book a demo <ArrowUpRight aria-hidden="true" />
           </Link>
           <button
+            ref={menuRef}
             className="menu-toggle"
-            aria-label="Open navigation"
+            aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'}
             aria-controls="nav"
-            aria-expanded="false"
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((v) => !v)}
           >
             <Menu aria-hidden="true" />
           </button>
@@ -139,7 +171,81 @@ export function Header({ active }) {
   );
 }
 
-import { FlutedGlass } from '@paper-design/shaders-react';
+import { Suspense, lazy } from 'react';
+
+const FlutedGlass = lazy(() =>
+  import('@paper-design/shaders-react').then((m) => ({ default: m.FlutedGlass }))
+);
+
+function FooterShader() {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  const [allowMotion, setAllowMotion] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      !document.documentElement.classList.contains('motion-paused')
+  );
+
+  useEffect(() => {
+    const el = ref.current;
+    const onMotion = (e) => setAllowMotion(!e.detail?.paused);
+    window.addEventListener('medibytes:motion', onMotion);
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onPref = (e) => setAllowMotion(!e.matches);
+    mq.addEventListener?.('change', onPref);
+    let io = null;
+    if (el && typeof IntersectionObserver !== 'undefined') {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            io?.disconnect();
+          }
+        },
+        { rootMargin: '200px' }
+      );
+      io.observe(el);
+    } else {
+      setVisible(true);
+    }
+    return () => {
+      window.removeEventListener('medibytes:motion', onMotion);
+      mq.removeEventListener?.('change', onPref);
+      io?.disconnect();
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
+      {visible && allowMotion && (
+        <Suspense fallback={null}>
+          <FlutedGlass
+            size={0.89}
+            shape="lines"
+            angle={0}
+            distortionShape="prism"
+            distortion={0.5}
+            shift={0}
+            blur={0}
+            edges={0.25}
+            stretch={0}
+            scale={1.11}
+            fit="cover"
+            highlights={0.1}
+            shadows={0.2}
+            grainMixer={0.1}
+            grainOverlay={0.1}
+            colorBack="#00000000"
+            colorHighlight="#FFFFFF"
+            colorShadow="#000000"
+            className="w-full h-full bg-transparent"
+          />
+        </Suspense>
+      )}
+    </div>
+  );
+}
 
 const FOOT_LINKS = [
   {
@@ -166,17 +272,17 @@ const FOOT_LINKS = [
   {
     title: 'Resources',
     links: [
-      ['FAQs', '/vision'],
+      ['FAQs', '/vision#faqs'],
       ['Technology & deployment', '/hospitals#deployment'],
       ['Workflow', '/how-it-works#workflow'],
-      ['Legal notice', '/#legal'],
+      ['Contact', '/contact'],
     ],
   },
 ];
 
 export function Footer() {
   return (
-    <footer id="legal" className="w-full bg-[#E6F2FF] relative overflow-hidden antialiased">
+    <footer id="footer" className="w-full bg-[#E6F2FF] relative overflow-hidden antialiased">
       {/* Giant outline wordmark */}
       <div className="relative w-full flex justify-center items-end pt-24 md:pt-32 pb-0 z-0">
         <span
@@ -190,29 +296,7 @@ export function Footer() {
 
       {/* Blue panel */}
       <div className="relative w-full bg-[#2F5AA8] z-10 min-h-[400px]">
-        <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
-          <FlutedGlass
-            size={0.89}
-            shape="lines"
-            angle={0}
-            distortionShape="prism"
-            distortion={0.5}
-            shift={0}
-            blur={0}
-            edges={0.25}
-            stretch={0}
-            scale={1.11}
-            fit="cover"
-            highlights={0.1}
-            shadows={0.2}
-            grainMixer={0.1}
-            grainOverlay={0.1}
-            colorBack="#00000000"
-            colorHighlight="#FFFFFF"
-            colorShadow="#000000"
-            className="w-full h-full bg-transparent"
-          />
-        </div>
+        <FooterShader />
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-16 md:py-24 flex flex-col lg:flex-row justify-between gap-16 lg:gap-8">
           <div className="flex flex-col justify-between max-w-sm w-full">

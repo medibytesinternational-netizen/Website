@@ -218,8 +218,8 @@ export function WorkflowSection() {
           <div className="workflow-progress" aria-hidden="true">
             <span></span>
           </div>
-          <Link className="text-button" to="/#product-preview">
-            Explore the concept <ArrowUpRight aria-hidden="true" />
+          <Link className="text-button" to="/#main">
+            Back to top <ArrowUpRight aria-hidden="true" />
           </Link>
         </div>
         <div className="workflow-steps">
@@ -418,7 +418,7 @@ export function VisionSection() {
 
 export function FaqSection({ items = FAQ_ITEMS }) {
   return (
-    <section className="faq container section">
+    <section className="faq container section" id="faqs">
       <div className="faq-heading reveal">
         <div className="eyebrow">A LITTLE MORE CLARITY</div>
         <h2>

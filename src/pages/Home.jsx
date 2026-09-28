@@ -81,15 +81,17 @@ export default function Home() {
             <video
               className="hero-sky-video"
               src="/blue-sky.mp4"
-              poster="/blue-sky.svg"
               autoPlay
               muted
+              defaultMuted
               loop
               playsInline
-              preload="auto"
+              preload="metadata"
+              disablePictureInPicture
               aria-hidden="true"
               tabIndex={-1}
               onCanPlay={(e) => {
+                e.currentTarget.muted = true;
                 e.currentTarget.classList.add('ready');
                 e.currentTarget.play().catch(() => {});
               }}
