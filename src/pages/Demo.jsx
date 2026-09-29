@@ -1,10 +1,23 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
-import { PageHero, ChecklistSection, MiniForm, ClosingCta, StatsBar } from '../components/content';
-import { FaqList } from '../components/sections';
+import { useId, useState } from 'react';
+import { ArrowDown, ArrowUpRight, Check, Plus } from 'lucide-react';
+import { MiniForm, ClosingCta } from '../components/content';
 import { useSiteMotion } from '../hooks/useSiteMotion';
 import { useSeo } from '../hooks/useSeo';
 import { BOOKING_URL } from '../config/site';
+import '../form-panel.css';
+import '../demo.css';
+
+const COVERS = [
+  "30-minute walkthrough of what's built",
+  "Straight answers on what isn't ready",
+  'Zero-pressure fit check',
+];
+
+const STEPS = [
+  ['Fast, 30-Minute Walkthrough', 'We jump straight into the product as it stands today.'],
+  ['Custom Workflow Mapping', 'We pinpoint exactly where your staff loses the most time.'],
+  ['Zero Pressure', "If the tech isn't a fit for your system, we will tell you directly."],
+];
 
 const DEMO_FAQ = [
   [
@@ -21,6 +34,35 @@ const DEMO_FAQ = [
   ],
 ];
 
+/** Accordion row; the answer opens by transitioning grid-template-rows, not height. */
+function Faq({ q, a }) {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  return (
+    <div className={`dm-faq${open ? ' is-open' : ''}`}>
+      <h3>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={`${id}-a`}
+          id={`${id}-q`}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span>{q}</span>
+          <span className="dm-faq-icon" aria-hidden="true">
+            <Plus />
+          </span>
+        </button>
+      </h3>
+      <div className="dm-faq-a" id={`${id}-a`} role="region" aria-labelledby={`${id}-q`}>
+        <div>
+          <p>{a}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Demo() {
   useSeo(
     'Book a Walkthrough | Medibytes',
@@ -29,119 +71,117 @@ export default function Demo() {
   useSiteMotion({ pinWorkflow: false, scrubVision: false, heroIntro: true });
 
   return (
-    <main id="main">
-      <PageHero
-        id="demo-heading"
-        eyebrow="WALKTHROUGH"
-        lines={[{ text: 'Give Your Doctors' }, { text: 'Their Time Back.', green: true }]}
-        sub="See what we have built, walk us through how your floor actually documents today, and tell us what would have to be true for Medibytes to work there. Book a slot below."
-        actions={
-          <a className="button primary" href="#booking-form">
-            Book a walkthrough <ArrowRight aria-hidden="true" />
-          </a>
-        }
-      />
-
-      <StatsBar
-        label="What the walkthrough covers"
-        stats={[
-          ['activity', "30-minute walkthrough of what's built"],
-          ['file-text', "Straight answers on what isn't ready"],
-          ['shield-check', 'Zero-pressure fit check'],
-        ]}
-      />
-
-      <section className="faq container section" id="booking-form">
-        <div className="faq-heading reveal">
-          <div className="eyebrow">BOOKING</div>
-          <h2>
-            Grab your
-            <br />
-            time slot.
-          </h2>
-        </div>
-        <div className="faq-list reveal">
-          {BOOKING_URL && (
-            <p style={{ maxWidth: 560, marginBottom: 22 }}>
-              <a className="text-button" href={BOOKING_URL}>
-                Pick a slot in our calendar <ArrowRight aria-hidden="true" />
-              </a>
-            </p>
-          )}
-          <p style={{ maxWidth: 560, marginBottom: 22 }}>
-            Drop your details into the short form below and we will come back with times that suit
-            your team.
+    <main id="main" className="dm">
+      <section className="dm-hero" aria-labelledby="demo-heading">
+        <div className="dm-hero-copy">
+          <p className="dm-kicker hero-in">Walkthrough</p>
+          <h1 id="demo-heading">
+            <span className="headline-line">Give Your Doctors</span>
+            <span className="headline-line dm-accent">Their Time Back.</span>
+          </h1>
+          <p className="dm-sub hero-in">
+            See what we have built, walk us through how your floor actually documents today, and
+            tell us what would have to be true for Medibytes to work there. Book a slot below.
           </p>
-          <MiniForm
-            idPrefix="demo"
-            button="Book a walkthrough"
-            subject="Demo request — Medibytes"
-            fields={{
-              name: {
-                label: 'Name',
-                hint: 'Who are we speaking with?',
-                autoComplete: 'name',
-              },
-              email: {
-                label: 'Work Email',
-                hint: 'Where should we send the invite?',
-                type: 'email',
-                inputMode: 'email',
-                autoComplete: 'email',
-              },
-              facility: {
-                label: 'Facility Type',
-                hint: 'e.g., 500-Bed Hospital',
-                placeholder: 'e.g., 500-Bed Hospital',
-                autoComplete: 'organization',
-              },
-              whatsapp: {
-                label: 'WhatsApp Number',
-                hint: 'For quick updates.',
-                type: 'tel',
-                inputMode: 'tel',
-                autoComplete: 'tel',
-              },
-            }}
-          />
+
+          <div className="dm-covers hero-in">
+            <p className="dm-label">What the walkthrough covers</p>
+            <ul>
+              {COVERS.map((c) => (
+                <li key={c}>
+                  <span className="dm-tick" aria-hidden="true">
+                    <Check />
+                  </span>
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <a className="dm-jump hero-in" href="#booking-form">
+            Book a walkthrough <ArrowDown aria-hidden="true" />
+          </a>
+        </div>
+
+        <div className="dm-hero-form">
+          <div className="fp hero-in" id="booking-form">
+            <p className="dm-label">Booking</p>
+            <h2>Grab your time slot.</h2>
+            {BOOKING_URL && (
+              <a className="dm-calendar" href={BOOKING_URL}>
+                Pick a slot in our calendar <ArrowUpRight aria-hidden="true" />
+              </a>
+            )}
+            <p className="fp-intro">
+              Drop your details into the short form below and we will come back with times that
+              suit your team.
+            </p>
+            <MiniForm
+              idPrefix="demo"
+              button="Book a walkthrough"
+              subject="Demo request — Medibytes"
+              fields={{
+                name: {
+                  label: 'Name',
+                  hint: 'Who are we speaking with?',
+                  autoComplete: 'name',
+                },
+                email: {
+                  label: 'Work Email',
+                  hint: 'Where should we send the invite?',
+                  type: 'email',
+                  inputMode: 'email',
+                  autoComplete: 'email',
+                },
+                facility: {
+                  label: 'Facility Type',
+                  hint: 'e.g., 500-Bed Hospital',
+                  placeholder: 'e.g., 500-Bed Hospital',
+                  autoComplete: 'organization',
+                },
+                whatsapp: {
+                  label: 'WhatsApp Number',
+                  hint: 'For quick updates.',
+                  type: 'tel',
+                  inputMode: 'tel',
+                  autoComplete: 'tel',
+                },
+              }}
+            />
+          </div>
         </div>
       </section>
 
-      <ChecklistSection
-        id="what-to-expect"
-        eyebrow="THE CALL"
-        title="What to expect on our call."
-        copy="No high-pressure sales pitch. Just a practical look at fixing administrative bottlenecks."
-        items={[
-          [
-            'activity',
-            'Fast, 30-Minute Walkthrough',
-            'We jump straight into the product as it stands today.',
-          ],
-          [
-            'scan-line',
-            'Custom Workflow Mapping',
-            'We pinpoint exactly where your staff loses the most time.',
-          ],
-          [
-            'check',
-            'Zero Pressure',
-            "If the tech isn't a fit for your system, we will tell you directly.",
-          ],
-        ]}
-      />
+      <section className="dm-call" id="what-to-expect" aria-labelledby="call-heading">
+        <header className="dm-call-head reveal">
+          <p className="dm-label">The call</p>
+          <h2 id="call-heading">What to expect on our call.</h2>
+          <p>
+            No high-pressure sales pitch. Just a practical look at fixing administrative
+            bottlenecks.
+          </p>
+        </header>
+        <ol className="dm-steps">
+          {STEPS.map(([title, copy], i) => (
+            <li key={title} className="dm-step reveal">
+              <span className="dm-step-num">{String(i + 1).padStart(2, '0')}</span>
+              <span className="dm-step-rule" aria-hidden="true" />
+              <h3>{title}</h3>
+              <p>{copy}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-      <section className="faq container section" id="faqs" style={{ paddingTop: 0 }}>
-        <div className="faq-heading reveal">
-          <div className="eyebrow">QUICK ANSWERS</div>
-          <h2>
-            Before you
-            <br />
-            book.
-          </h2>
-        </div>
-        <div className="faq-list reveal">
-          <FaqList items={DEMO_FAQ} />
+      <section className="dm-faqs" id="faqs" aria-labelledby="faqs-heading">
+        <header className="dm-faqs-head reveal">
+          <p className="dm-label">Quick answers</p>
+          <h2 id="faqs-heading">Before you book.</h2>
+        </header>
+        <div className="dm-faq-list reveal">
+          {DEMO_FAQ.map(([q, a]) => (
+            <Faq key={q} q={q} a={a} />
+          ))}
         </div>
       </section>
 

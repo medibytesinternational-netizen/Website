@@ -1,0 +1,380 @@
+/* ─────────────────────────────────────────────────────────────
+   /founders
+   Scoped under .fd so the legacy layout CSS in style.css is untouched.
+   ───────────────────────────────────────────────────────────── */
+
+.fd {
+  --fd-ink: #0F2A4D;
+  --fd-muted: #3A5A8C;
+  --fd-soft: #6A86B0;
+  --fd-primary: #2F5AA8;
+  --fd-hair: rgba(47, 90, 168, 0.14);
+  --fd-frame: #D8E6F8;
+  --fd-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fd-gutter: clamp(20px, 4vw, 40px);
+  color: var(--fd-ink);
+}
+
+.fd h1,
+.fd h2 {
+  color: var(--fd-ink);
+}
+
+.fd .headline-line {
+  display: block;
+}
+
+/* ───────── Hero ───────── */
+
+.fd-hero {
+  max-width: 1256px;
+  margin: 0 auto;
+  padding: clamp(140px, 16vw, 190px) var(--fd-gutter) clamp(80px, 10vw, 140px);
+}
+
+.fd-kicker {
+  font-size: 15px;
+  font-weight: 550;
+  color: var(--fd-primary);
+  margin-bottom: 26px;
+}
+
+.fd-hero h1 {
+  font-size: clamp(46px, 7.4vw, 108px);
+  line-height: 0.97;
+  letter-spacing: -0.055em;
+  font-weight: 500;
+}
+
+.fd .fd-accent {
+  color: var(--fd-primary);
+}
+
+.fd-hero-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px 64px;
+  margin-top: clamp(32px, 4vw, 48px);
+}
+
+.fd-hero-foot p {
+  max-width: 48ch;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.6;
+  color: var(--fd-muted);
+}
+
+.fd-down {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--fd-ink);
+  transition: color 0.3s var(--fd-ease);
+}
+
+.fd-down svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.5s var(--fd-ease);
+}
+
+.fd-down:hover {
+  color: var(--fd-primary);
+}
+
+.fd-down:hover svg {
+  transform: translateY(3px);
+}
+
+/* Portrait trio: three frames, the middle one set lower for rhythm. */
+
+.fd-trio {
+  list-style: none;
+  margin: clamp(56px, 7vw, 96px) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 32px);
+  align-items: start;
+}
+
+.fd-trio-item:nth-child(2) {
+  margin-top: clamp(32px, 5vw, 72px);
+}
+
+.fd-trio-link {
+  display: grid;
+  gap: 16px;
+}
+
+.fd-trio-meta {
+  display: grid;
+  gap: 3px;
+}
+
+.fd-trio-name {
+  font-size: clamp(15px, 1.3vw, 18px);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  transition: color 0.3s var(--fd-ease);
+}
+
+.fd-trio-role {
+  font-size: 13px;
+  color: var(--fd-soft);
+}
+
+.fd-trio-link:hover .fd-trio-name {
+  color: var(--fd-primary);
+}
+
+/* ───────── Photo frame + reveal ───────── */
+
+.fd-frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--fd-frame);
+  clip-path: inset(100% 0 0 0 round 14px);
+  transition: clip-path 1.3s var(--fd-ease);
+  transition-delay: calc(var(--i, 0) * 140ms);
+}
+
+.is-in .fd-frame {
+  clip-path: inset(0 0 0 0 round 14px);
+}
+
+.fd-photo,
+.fd-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.fd-photo img {
+  object-fit: cover;
+  object-position: 50% 20%;
+  filter: grayscale(1) contrast(1.04) brightness(1.02);
+  transform: scale(1.12);
+  transition: transform 1.6s var(--fd-ease), filter 0.9s var(--fd-ease);
+  transition-delay: calc(var(--i, 0) * 140ms), 0s;
+}
+
+.is-in .fd-photo img {
+  transform: scale(1);
+}
+
+.fd-trio-link:hover .fd-photo img,
+.fd-trio-link:focus-visible .fd-photo img {
+  filter: none;
+  transform: scale(1.03);
+  transition-delay: 0s;
+}
+
+/* ───────── Chapters ───────── */
+
+.fd-chapters {
+  max-width: 1256px;
+  margin: 0 auto;
+  padding: 0 var(--fd-gutter) clamp(40px, 6vw, 80px);
+}
+
+.fd-chapter {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(40px, 7vw, 112px);
+  padding: clamp(80px, 10vw, 136px) 0;
+  border-top: 1px solid var(--fd-hair);
+  scroll-margin-top: 40px;
+}
+
+.fd-chapter.is-flip .fd-side {
+  order: 2;
+}
+
+.fd-side {
+  position: relative;
+}
+
+.fd-portrait {
+  position: sticky;
+  top: 110px;
+  margin: 0;
+  max-width: 440px;
+}
+
+.fd-chapter.is-flip .fd-portrait {
+  margin-left: auto;
+}
+
+/* In the chapter, colour settles in once the photo has been revealed. */
+.fd-portrait.is-in .fd-photo img {
+  filter: none;
+  transition-delay: 0s, 0.7s;
+}
+
+.fd-portrait figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--fd-hair);
+}
+
+.fd-num {
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--fd-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.fd-role {
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--fd-primary);
+}
+
+.fd-story {
+  display: grid;
+  align-content: start;
+  gap: 28px;
+  max-width: 64ch;
+}
+
+.fd-name {
+  font-size: clamp(34px, 4.2vw, 58px);
+  line-height: 1.03;
+  letter-spacing: -0.05em;
+  font-weight: 500;
+}
+
+.fd .fd-quote {
+  font-size: clamp(22px, 2.3vw, 32px);
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+  color: var(--fd-primary);
+  max-width: 24ch;
+}
+
+.fd-body {
+  display: grid;
+  gap: 18px;
+}
+
+.fd-body p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--fd-muted);
+}
+
+.fd .fd-body .fd-first {
+  font-size: clamp(17px, 1.4vw, 19px);
+  line-height: 1.65;
+  color: var(--fd-ink);
+}
+
+.fd .fd-sign {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding-top: 22px;
+  border-top: 1px solid var(--fd-hair);
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--fd-ink);
+}
+
+.fd-sign span {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--fd-soft);
+}
+
+/* ───────── Motion off ───────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .fd-frame,
+  .fd-photo img {
+    transition: none !important;
+  }
+
+  .fd-frame {
+    clip-path: none;
+  }
+
+  .fd-photo img {
+    transform: none;
+  }
+}
+
+.motion-paused .fd-frame {
+  clip-path: inset(0 0 0 0 round 14px);
+  transition: none;
+}
+
+.motion-paused .fd-photo img {
+  transform: none;
+  transition: none;
+}
+
+/* ───────── Responsive ───────── */
+
+@media (max-width: 900px) {
+  .fd-chapter {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .fd-chapter.is-flip .fd-side {
+    order: 0;
+  }
+
+  .fd-portrait {
+    position: static;
+    max-width: 360px;
+  }
+
+  .fd-chapter.is-flip .fd-portrait {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .fd-trio {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .fd-trio-item:nth-child(2) {
+    margin-top: 28px;
+  }
+
+  .fd-trio-name {
+    font-size: 12.5px;
+    line-height: 1.3;
+  }
+
+  .fd-trio-role {
+    font-size: 11px;
+  }
+
+  .fd-frame {
+    border-radius: 10px;
+  }
+
+  .fd-portrait {
+    max-width: none;
+  }
+}

@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { FaqList } from '../components/sections';
-import { StatsBar, ChecklistSection, ModuleGrid, ClosingCta } from '../components/content';
+import { StatsBar, ModuleStack, ClosingCta } from '../components/content';
 import ProductPreview from '../components/ProductPreview';
+import ClinicalWins from '../components/ClinicalWins';
+import DotGlobe from '../components/DotGlobe';
 import BackgroundVideo from '../components/BackgroundVideo';
 import { useSiteMotion } from '../hooks/useSiteMotion';
 import { useSeo } from '../hooks/useSeo';
@@ -181,79 +183,40 @@ export default function Home() {
       </section>
 
       <section className="platform-teaser container section" style={{ paddingTop: 0 }}>
-        <div className="section-intro reveal">
-          <div className="eyebrow">THE INTELLIGENCE LAYER</div>
-          <div className="intro-row">
-            <h2>
-              A central intelligence hub
-              <br />
-              for your facility.
-            </h2>
-            <p>
-              Think of Medibytes as a layer that drapes over the hospital management software you
-              already use, rather than another system to run alongside it.
+        <div className="hub-grid">
+          <div className="hub-copy">
+            <div className="section-intro reveal">
+              <div className="eyebrow">THE INTELLIGENCE LAYER</div>
+              <h2>
+                A central intelligence hub
+                <br />
+                for your facility.
+              </h2>
+            </div>
+            <p className="reveal">
+              There are no data migrations. Nothing legacy gets ripped out. We make your current
+              infrastructure listen: the software captures physician dictation — built for
+              Indian-accented English and Tamil, including the way clinicians switch between them —
+              and maps it into structured medical files a clinician then reviews and signs.
             </p>
+            <div className="teaser-cta reveal">
+              <Link className="button primary" to="/how-it-works">
+                See the architecture <ArrowRight aria-hidden="true" />
+              </Link>
+            </div>
           </div>
-        </div>
-        <p className="reveal" style={{ maxWidth: 720 }}>
-          There are no data migrations. Nothing legacy gets ripped out. We make your current
-          infrastructure listen: the software captures physician dictation — built for
-          Indian-accented English and Tamil, including the way clinicians switch between them — and
-          maps it into structured medical files a clinician then reviews and signs.
-        </p>
-        <div className="teaser-cta reveal">
-          <Link className="button primary" to="/how-it-works">
-            See the architecture <ArrowRight aria-hidden="true" />
-          </Link>
+          <DotGlobe className="reveal" />
         </div>
       </section>
 
-      <ChecklistSection
-        id="clinical-wins"
-        eyebrow="ZERO IT CHAOS"
-        title="Skip the IT chaos. Focus on clinical wins."
-        copy="Bringing in new enterprise software usually means months of disruption. We designed around that from the start."
-        items={[
-          [
-            'server',
-            'Work with what you have',
-            'Keep your incumbent HMIS. Medibytes is designed to attach to it without a migration project or a vendor negotiation.',
-          ],
-          [
-            'activity',
-            "Results we'll measure together",
-            'We are not going to quote you someone else’s numbers. We instrument the workflow from day one of a pilot, and you see the real figures for your own floor.',
-          ],
-          [
-            'scan-line',
-            'Absolute traceability',
-            'Every generated field links back to the doctor’s original audio. If a detail can’t be traced to something that was actually said, the field stays blank for the clinician to fill. We’d rather leave a gap than invent one.',
-          ],
-          [
-            'file-text',
-            'Documents that match yours',
-            'Need physical forms? The system is designed to print replicas of your existing paperwork, without an API integration project first.',
-          ],
-          [
-            'shield-check',
-            'Built for bad internet',
-            'Outages happen. A four-hour offline queue holds work locally, so your medical teams never hit a wall mid-shift.',
-          ],
-        ]}
-        caption="A non-invasive AI layer designed to integrate with the hospital HMIS you already run."
-      />
-      <div className="container reveal" style={{ marginTop: -60, paddingBottom: 60 }}>
-        <Link className="text-button" to="/hospitals#deployment">
-          Explore the tech <ArrowRight aria-hidden="true" />
-        </Link>
-      </div>
+      <ClinicalWins />
 
-      <ModuleGrid
-        eyebrow="MODULES FOR EVERY FLOOR"
-        title="Smart tools tailored for every floor."
-        copy="Here is how the modules are designed to clear bottlenecks across your hospital."
-        modules={MODULES}
-      />
+        <ModuleStack
+          eyebrow="MODULES FOR EVERY FLOOR"
+          title="Smart tools tailored for every floor."
+          copy="Here is how the modules are designed to clear bottlenecks across your hospital."
+          modules={MODULES}
+        />
       <div className="container reveal" style={{ marginTop: -40, paddingBottom: 60 }}>
         <p style={{ maxWidth: 640 }}>
           Modules are at different stages of build. We will tell you straight which is which on the

@@ -1,0 +1,312 @@
+/* ─────────────────────────────────────────────────────────────
+   /contact
+   Scoped under .ct so the legacy layout CSS in style.css is untouched.
+   ───────────────────────────────────────────────────────────── */
+
+.ct {
+  --ct-ink: #0F2A4D;
+  --ct-muted: #3A5A8C;
+  --ct-soft: #6A86B0;
+  --ct-primary: #2F5AA8;
+  --ct-primary-deep: #1E3F7A;
+  --ct-line: #B3D9FF;
+  --ct-hair: rgba(47, 90, 168, 0.14);
+  --ct-surface: #FFFFFF;
+  --ct-field: #F4F9FF;
+  --ct-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ct-gutter: clamp(20px, 4vw, 40px);
+  color: var(--ct-ink);
+}
+
+.ct h1,
+.ct h2,
+.ct h3 {
+  color: var(--ct-ink);
+}
+
+.ct .headline-line {
+  display: block;
+}
+
+.ct-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--ct-primary);
+}
+
+/* ───────── Hero ───────── */
+
+.ct-hero {
+  max-width: 1256px;
+  margin: 0 auto;
+  padding: clamp(140px, 16vw, 190px) var(--ct-gutter) clamp(64px, 8vw, 104px);
+}
+
+.ct-kicker {
+  font-size: 15px;
+  font-weight: 550;
+  color: var(--ct-primary);
+  margin-bottom: 26px;
+}
+
+.ct-hero h1 {
+  font-size: clamp(42px, 6.4vw, 92px);
+  line-height: 0.99;
+  letter-spacing: -0.055em;
+  font-weight: 500;
+}
+
+.ct .ct-accent {
+  color: var(--ct-primary);
+}
+
+.ct-hero-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px 64px;
+  margin-top: clamp(32px, 4vw, 52px);
+}
+
+.ct-hero-foot p {
+  max-width: 54ch;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.6;
+  color: var(--ct-muted);
+}
+
+.ct-jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--ct-ink);
+  transition: color 0.3s var(--ct-ease);
+}
+
+.ct-jump svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.5s var(--ct-ease);
+}
+
+.ct-jump:hover {
+  color: var(--ct-primary);
+}
+
+.ct-jump:hover svg {
+  transform: translateY(3px);
+}
+
+/* ───────── Desk: channels + form ───────── */
+
+.ct-desk {
+  max-width: 1256px;
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 88px) var(--ct-gutter) clamp(100px, 12vw, 150px);
+  /* Hairline inset to the content edges, not the padded box. */
+  background: linear-gradient(var(--ct-hair), var(--ct-hair)) var(--ct-gutter) 0 /
+    calc(100% - 2 * var(--ct-gutter)) 1px no-repeat;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(40px, 7vw, 112px);
+  align-items: start;
+}
+
+.ct-lines-head {
+  display: grid;
+  gap: 14px;
+  margin-bottom: clamp(28px, 4vw, 44px);
+}
+
+.ct-lines-head h2,
+.ct .fp h2 {
+  font-size: clamp(30px, 3.4vw, 46px);
+  line-height: 1.06;
+  letter-spacing: -0.045em;
+  font-weight: 500;
+}
+
+.ct-lines-head > p:last-child {
+  max-width: 44ch;
+  font-size: 16px;
+}
+
+.ct-channels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--ct-hair);
+}
+
+.ct-channel {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  padding: clamp(24px, 3vw, 34px) 0;
+  border-bottom: 1px solid var(--ct-hair);
+}
+
+.ct-channel .ct-label {
+  color: var(--ct-soft);
+  font-size: 12.5px;
+}
+
+.ct-channel h3 {
+  font-size: clamp(22px, 2vw, 27px);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  font-weight: 500;
+}
+
+.ct-channel p {
+  font-size: 15px;
+  max-width: 46ch;
+}
+
+.ct-channel address {
+  display: grid;
+  font-style: normal;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ct-ink);
+}
+
+.ct-channel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+.ct-email {
+  font-size: clamp(16px, 1.5vw, 19px);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  color: var(--ct-ink);
+  word-break: break-all;
+  background-image: linear-gradient(var(--ct-primary), var(--ct-primary));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s var(--ct-ease), color 0.3s var(--ct-ease);
+}
+
+.ct-email:hover {
+  color: var(--ct-primary);
+  background-size: 100% 1px;
+}
+
+.ct-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 5px 12px 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--ct-hair);
+  background: transparent;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ct-muted);
+  transition: background 0.3s var(--ct-ease), color 0.3s var(--ct-ease), border-color 0.3s var(--ct-ease);
+}
+
+.ct-copy:hover {
+  background: var(--ct-surface);
+  border-color: var(--ct-line);
+  color: var(--ct-ink);
+}
+
+.ct-copy-icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+}
+
+.ct-copy-icon svg {
+  position: absolute;
+  inset: 0;
+  width: 14px;
+  height: 14px;
+  transition: opacity 0.3s var(--ct-ease), transform 0.45s var(--ct-ease);
+}
+
+.ct-copy-icon svg:last-child {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.ct-copy.is-copied {
+  color: #2E7A55;
+  border-color: rgba(46, 122, 85, 0.35);
+}
+
+.ct-copy.is-copied .ct-copy-icon svg:first-child {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.ct-copy.is-copied .ct-copy-icon svg:last-child {
+  opacity: 1;
+  transform: none;
+}
+
+.ct-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 36px;
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--ct-primary);
+}
+
+.ct-link svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.45s var(--ct-ease);
+}
+
+.ct-link:hover svg {
+  transform: translateX(4px);
+}
+
+.ct-link[target='_blank']:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* ───────── Form panel ───────── */
+
+.ct-form-col {
+  position: sticky;
+  top: 100px;
+}
+
+/* ───────── Motion off ───────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .ct *,
+  .ct *::before,
+  .ct *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ───────── Responsive ───────── */
+
+@media (max-width: 960px) {
+  .ct-desk {
+    grid-template-columns: 1fr;
+  }
+
+  .ct-form-col {
+    position: static;
+  }
+}
+

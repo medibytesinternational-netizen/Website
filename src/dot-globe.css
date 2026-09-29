@@ -1,0 +1,65 @@
+/* Rotating dotted globe (components/DotGlobe.jsx). */
+
+.dot-globe {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.dot-globe canvas {
+  display: block;
+}
+
+/* Soft halo behind the sphere. */
+.dot-globe::before {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(128, 179, 255, 0.35), transparent 70%);
+  filter: blur(24px);
+  z-index: -1;
+}
+
+/* Home "intelligence hub" section: copy left, globe right, centred on each other. */
+.hub-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+
+.hub-copy {
+  display: grid;
+  gap: 24px;
+  justify-items: start;
+}
+
+.hub-copy .section-intro {
+  margin-bottom: 0;
+}
+
+.hub-copy > p {
+  max-width: 56ch;
+  margin: 0;
+}
+
+.hub-copy .teaser-cta {
+  margin-top: 4px;
+}
+
+.hub-grid .dot-globe {
+  max-width: 480px;
+  justify-self: end;
+}
+
+@media (max-width: 860px) {
+  .hub-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hub-grid .dot-globe {
+    max-width: min(360px, 88vw);
+    justify-self: center;
+  }
+}

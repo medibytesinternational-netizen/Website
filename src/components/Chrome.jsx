@@ -18,11 +18,11 @@ export function Logo() {
 }
 
 const PRODUCT_LINKS = [
-  ['OPD Documentation', '/hospitals'],
-  ['IPD Documentation', '/hospitals'],
-  ['Clinical Intelligence', '/how-it-works#platform'],
-  ['OCR & External Documents', '/how-it-works#platform'],
-  ['Insurance Intelligence', '/how-it-works#platform'],
+  ['OPD Intelligence', '/features/opd'],
+  ['IPD Intelligence', '/features/ipd'],
+  ['Clinical Intelligence', '/features/clinical'],
+  ['Document Intelligence', '/features/documents'],
+  ['Insurance Intelligence', '/features/insurance'],
 ];
 
 const COMPANY_LINKS = [
@@ -143,6 +143,9 @@ export function Header() {
               extra={
                 <>
                   <span className="nav-sep">Overview</span>
+                  <NavLink to="/features" end className={navLinkClass} onClick={closeMobile}>
+                    All features
+                  </NavLink>
                   <NavLink to="/how-it-works" className={navLinkClass} onClick={closeMobile}>
                     How it works
                   </NavLink>
@@ -267,11 +270,10 @@ const FOOT_LINKS = [
   {
     title: 'Product',
     links: [
+      ['Features', '/features'],
       ['How it works', '/how-it-works'],
       ['For hospitals', '/hospitals'],
-      ['OPD Documentation', '/hospitals'],
-      ['IPD Documentation', '/hospitals'],
-      ['Clinical Intelligence', '/how-it-works#platform'],
+      ['Clinical Intelligence', '/features/clinical'],
       ['Book a walkthrough', '/demo'],
     ],
   },

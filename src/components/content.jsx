@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Icon } from './icons';
+import ScrollStack, { ScrollStackItem } from './ScrollStack';
 import BackgroundVideo from './BackgroundVideo';
 import { CONTACT_EMAIL } from '../config/site';
 
@@ -109,6 +110,46 @@ export function ModuleGrid({ eyebrow, title, copy, modules }) {
           </div>
         ))}
       </div>
+    </section>
+  );
+}
+
+/* ---------- Module scroll-stack (same modules, stacked cards on scroll) ---------- */
+export function ModuleStack({ eyebrow, title, copy, modules }) {
+  return (
+    <section className="platform-teaser container section">
+      <div className="section-intro reveal">
+        <div className="eyebrow">{eyebrow}</div>
+        <div className="intro-row">
+          <h2>{title}</h2>
+          <p>{copy}</p>
+        </div>
+      </div>
+      <ScrollStack
+        useWindowScroll
+        itemDistance="40vh"
+        itemScale={0.04}
+        itemStackDistance={48}
+        stackPosition="22%"
+        scaleEndPosition="12%"
+        baseScale={0.88}
+      >
+        {modules.map((m) => (
+          <ScrollStackItem key={m.title} itemClassName="module-stack-card">
+            <div className="card-top">
+              <Icon name={m.icon} />
+              <span>{m.kicker}</span>
+            </div>
+            <h3>{m.title}</h3>
+            <p>{m.copy}</p>
+            <div className="teaser-cta">
+              <Link className="text-button" to={m.to}>
+                {m.cta} <ArrowRight aria-hidden="true" />
+              </Link>
+            </div>
+          </ScrollStackItem>
+        ))}
+      </ScrollStack>
     </section>
   );
 }

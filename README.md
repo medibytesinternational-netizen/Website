@@ -25,9 +25,9 @@ Hosting configuration lives in `.openai/hosting.json`.
 
 Routing is client-side, so the host **must serve `index.html` for any path that
 has no matching file**. Without it, opening or refreshing `/demo` returns 404.
-`public/_redirects` covers Netlify and Cloudflare Pages; on other hosts set the
-equivalent rewrite (`try_files $uri /index.html` on nginx, a catch-all rewrite
-on Vercel/Firebase).
+`public/_redirects` covers Netlify and Cloudflare Pages, and `vercel.json` covers
+Vercel. On other hosts set the equivalent rewrite (`try_files $uri /index.html`
+on nginx, a catch-all rewrite on Firebase).
 
 ## Structure
 

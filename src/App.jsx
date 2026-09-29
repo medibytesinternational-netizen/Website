@@ -8,6 +8,8 @@ import Home from './pages/Home';
 // Home ships in the main bundle because it is the entry point for almost every
 // visit; the rest are fetched on navigation so the first paint stays small.
 const HowItWorks = lazy(() => import('./pages/HowItWorks'));
+const Features = lazy(() => import('./pages/Features'));
+const FeaturePillar = lazy(() => import('./pages/FeaturePillar'));
 const Hospitals = lazy(() => import('./pages/Hospitals'));
 const About = lazy(() => import('./pages/About'));
 const Careers = lazy(() => import('./pages/Careers'));
@@ -137,6 +139,8 @@ export default function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/features/:slug" element={<FeaturePillar />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/hospitals" element={<Hospitals />} />
             <Route path="/about" element={<About />} />

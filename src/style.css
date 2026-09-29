@@ -437,6 +437,12 @@ footer button{color:rgba(255,255,255,.8)}
 /* smart-tools cards: buttons sit on one parallel line */
 .teaser-card{display:flex;flex-direction:column}
 .teaser-card .teaser-cta{margin-top:auto;padding-top:24px}
+/* scroll-stack module cards (home "Smart tools" section) */
+.module-stack-card{background-color:#fff;background-image:url(/cards-bg.svg);background-size:cover;background-position:center;border:1px solid var(--line);border-radius:20px;padding:38px;min-height:340px;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(47,90,168,.14)}
+.module-stack-card h3{font-size:30px;margin:14px 0 12px}
+.module-stack-card p{font-size:14px;max-width:600px}
+.module-stack-card .teaser-cta{margin-top:auto;padding-top:22px}
+@media(max-width:700px){.module-stack-card{padding:26px;min-height:300px}.module-stack-card h3{font-size:25px}}
 /* footer social icons */
 .social-links a{display:inline-flex;transition:opacity .2s ease,transform .2s ease}
 .social-links a:hover{opacity:.7;transform:translateY(-2px)}

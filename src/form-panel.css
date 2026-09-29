@@ -1,0 +1,135 @@
+/* ─────────────────────────────────────────────────────────────
+   Form panel: the white card that wraps MiniForm on /contact and /demo.
+   Restyles MiniForm's legacy .note-field markup inside .fp only.
+   ───────────────────────────────────────────────────────────── */
+
+.fp {
+  --fp-ink: #0F2A4D;
+  --fp-muted: #3A5A8C;
+  --fp-soft: #6A86B0;
+  --fp-primary: #2F5AA8;
+  --fp-line: #B3D9FF;
+  --fp-hair: rgba(47, 90, 168, 0.14);
+  --fp-surface: #FFFFFF;
+  --fp-field: #F4F9FF;
+  --fp-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fp {
+  color: var(--fp-ink);
+  display: grid;
+  gap: 14px;
+  padding: clamp(26px, 3.4vw, 44px);
+  border-radius: 20px;
+  background: var(--fp-surface);
+  border: 1px solid var(--fp-hair);
+  box-shadow: 0 40px 80px -56px rgba(15, 42, 77, 0.5);
+  scroll-margin-top: 100px;
+}
+
+.fp .fp-intro {
+  font-size: 15px;
+  max-width: 50ch;
+  margin-bottom: 10px;
+}
+
+.fp form {
+  display: grid;
+  gap: 18px;
+}
+
+.fp .note-field {
+  margin: 0;
+}
+
+.fp .note-field label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--fp-ink);
+}
+
+.fp .note-field label > span {
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--fp-soft);
+}
+
+.fp .note-field input,
+.fp .note-field textarea {
+  width: 100%;
+  font-size: 15px;
+  padding: 13px 15px;
+  border-radius: 11px;
+  border: 1px solid var(--fp-hair);
+  background: var(--fp-field);
+  color: var(--fp-ink);
+  outline: none;
+  transition: border-color 0.3s var(--fp-ease), background 0.3s var(--fp-ease), box-shadow 0.4s var(--fp-ease);
+}
+
+.fp .note-field textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.fp .note-field input:hover,
+.fp .note-field textarea:hover {
+  border-color: var(--fp-line);
+}
+
+.fp .note-field input:focus,
+.fp .note-field textarea:focus {
+  background: var(--fp-surface);
+  border-color: var(--fp-primary);
+  box-shadow: 0 0 0 4px rgba(47, 90, 168, 0.12);
+}
+
+.fp .button {
+  justify-self: start;
+  margin-top: 4px;
+}
+
+.fp .button svg {
+  transition: transform 0.45s var(--fp-ease);
+}
+
+.fp .button:hover svg {
+  transform: translateX(4px);
+}
+
+.fp .form-note {
+  margin-top: 2px;
+  padding-top: 16px;
+  border-top: 1px solid var(--fp-hair);
+  font-size: 13px;
+  max-width: none;
+}
+
+.fp .form-note .text-button {
+  font-size: 13px;
+  margin: 0;
+  display: inline;
+  font-weight: 550;
+  color: var(--fp-primary);
+}
+
+
+.fp h2 {
+  color: var(--fp-ink);
+}
+
+@media (max-width: 560px) {
+  .fp {
+    border-radius: 16px;
+  }
+
+  .fp .button {
+    justify-self: stretch;
+  }
+}

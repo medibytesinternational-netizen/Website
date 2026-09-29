@@ -1,0 +1,440 @@
+/* ─────────────────────────────────────────────────────────────
+   /demo: book a walkthrough
+   Scoped under .dm; the booking card itself is styled by form-panel.css.
+   ───────────────────────────────────────────────────────────── */
+
+.dm {
+  --dm-ink: #0F2A4D;
+  --dm-muted: #3A5A8C;
+  --dm-soft: #6A86B0;
+  --dm-primary: #2F5AA8;
+  --dm-line: #B3D9FF;
+  --dm-hair: rgba(47, 90, 168, 0.14);
+  --dm-surface: #FFFFFF;
+  --dm-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dm-gutter: clamp(20px, 4vw, 40px);
+  color: var(--dm-ink);
+}
+
+.dm h1,
+.dm h2,
+.dm h3 {
+  color: var(--dm-ink);
+}
+
+.dm .headline-line {
+  display: block;
+}
+
+.dm-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--dm-primary);
+}
+
+/* ───────── Hero: pitch on the left, booking card on the right ───────── */
+
+.dm-hero {
+  max-width: 1256px;
+  margin: 0 auto;
+  padding: clamp(130px, 14vw, 170px) var(--dm-gutter) clamp(88px, 10vw, 136px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.dm-hero-copy {
+  display: grid;
+  justify-items: start;
+  padding-top: clamp(0px, 3vw, 40px);
+}
+
+.dm-kicker {
+  font-size: 15px;
+  font-weight: 550;
+  color: var(--dm-primary);
+  margin-bottom: 24px;
+}
+
+.dm-hero h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 0.99;
+  letter-spacing: -0.055em;
+  font-weight: 500;
+}
+
+.dm .dm-accent {
+  color: var(--dm-primary);
+}
+
+.dm .dm-sub {
+  max-width: 46ch;
+  margin-top: clamp(24px, 3vw, 36px);
+  font-size: clamp(16px, 1.35vw, 18px);
+  line-height: 1.6;
+  color: var(--dm-muted);
+}
+
+.dm-covers {
+  width: 100%;
+  max-width: 460px;
+  margin-top: clamp(32px, 4vw, 48px);
+}
+
+.dm-covers .dm-label {
+  color: var(--dm-soft);
+  font-size: 12.5px;
+  margin-bottom: 8px;
+}
+
+.dm-covers ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--dm-hair);
+}
+
+.dm-covers li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--dm-hair);
+  font-size: 15.5px;
+  font-weight: 500;
+}
+
+.dm-tick {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--dm-primary);
+  color: var(--dm-surface);
+  flex-shrink: 0;
+}
+
+.dm-tick svg {
+  width: 13px;
+  height: 13px;
+  stroke-width: 2.4;
+}
+
+.dm-jump {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin-top: 24px;
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--dm-ink);
+}
+
+.dm-jump svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.5s var(--dm-ease);
+}
+
+.dm-jump:hover svg {
+  transform: translateY(3px);
+}
+
+.dm .fp {
+  scroll-margin-top: 90px;
+}
+
+.dm .fp form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 14px;
+}
+
+.dm .fp form > * {
+  grid-column: 1 / -1;
+}
+
+.dm .fp form > .note-field:nth-child(3),
+.dm .fp form > .note-field:nth-child(4) {
+  grid-column: auto;
+}
+
+.dm .fp form > .note-field:nth-child(3) label,
+.dm .fp form > .note-field:nth-child(4) label {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.dm-calendar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--dm-primary);
+}
+
+.dm-calendar svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ───────── The call: three numbered steps ───────── */
+
+.dm-call,
+.dm-faqs {
+  max-width: 1256px;
+  margin: 0 auto;
+  padding: clamp(72px, 9vw, 120px) var(--dm-gutter);
+  /* Hairline inset to the content edges, not the padded box. */
+  background: linear-gradient(var(--dm-hair), var(--dm-hair)) var(--dm-gutter) 0 /
+    calc(100% - 2 * var(--dm-gutter)) 1px no-repeat;
+}
+
+.dm-call-head,
+.dm-faqs-head {
+  display: grid;
+  gap: 14px;
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+
+.dm-call h2,
+.dm-faqs h2 {
+  font-size: clamp(32px, 3.8vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+  font-weight: 500;
+}
+
+.dm-call-head > p:last-child {
+  max-width: 50ch;
+  font-size: 16px;
+}
+
+.dm-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 56px);
+}
+
+.dm-step {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.dm-step-num {
+  font-size: clamp(40px, 4.6vw, 64px);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: var(--dm-line);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.5s var(--dm-ease);
+}
+
+.dm-step:hover .dm-step-num {
+  color: var(--dm-primary);
+}
+
+.dm-step-rule {
+  position: relative;
+  height: 1px;
+  margin: 8px 0 10px;
+  background: var(--dm-hair);
+}
+
+.dm-step-rule::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dm-primary);
+}
+
+.dm-step-rule::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--dm-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--dm-ease);
+}
+
+.dm-step:hover .dm-step-rule::after {
+  transform: scaleX(1);
+}
+
+.dm-step h3 {
+  font-size: clamp(20px, 1.8vw, 24px);
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+}
+
+.dm-step p {
+  font-size: 15.5px;
+  max-width: 34ch;
+}
+
+/* ───────── FAQs ───────── */
+
+.dm-faqs {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: start;
+  scroll-margin-top: 80px;
+}
+
+.dm-faqs-head {
+  margin-bottom: 0;
+}
+
+.dm-faq-list {
+  border-top: 1px solid var(--dm-hair);
+}
+
+.dm-faq {
+  border-bottom: 1px solid var(--dm-hair);
+}
+
+.dm-faq h3 {
+  margin: 0;
+  font-size: inherit;
+  letter-spacing: normal;
+}
+
+.dm-faq button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 0;
+  background: none;
+  text-align: left;
+  font-size: clamp(17px, 1.5vw, 20px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--dm-ink);
+  transition: color 0.3s var(--dm-ease);
+}
+
+.dm-faq button:hover {
+  color: var(--dm-primary);
+}
+
+.dm-faq-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--dm-hair);
+  flex-shrink: 0;
+  transition: background 0.4s var(--dm-ease), border-color 0.4s var(--dm-ease), color 0.4s var(--dm-ease);
+}
+
+.dm-faq-icon svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.5s var(--dm-ease);
+}
+
+.dm-faq.is-open .dm-faq-icon {
+  background: var(--dm-primary);
+  border-color: var(--dm-primary);
+  color: var(--dm-surface);
+}
+
+.dm-faq.is-open .dm-faq-icon svg {
+  transform: rotate(45deg);
+}
+
+.dm-faq-a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s var(--dm-ease);
+}
+
+.dm-faq-a > div {
+  overflow: hidden;
+}
+
+.dm-faq.is-open .dm-faq-a {
+  grid-template-rows: 1fr;
+}
+
+.dm-faq-a p {
+  max-width: 62ch;
+  padding: 0 48px 26px 0;
+  font-size: 15.5px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.4s var(--dm-ease), transform 0.5s var(--dm-ease);
+}
+
+.dm-faq.is-open .dm-faq-a p {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.08s;
+}
+
+/* ───────── Motion off ───────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .dm *,
+  .dm *::before,
+  .dm *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ───────── Responsive ───────── */
+
+@media (max-width: 980px) {
+  .dm-hero,
+  .dm-faqs {
+    grid-template-columns: 1fr;
+  }
+
+  .dm-hero-copy {
+    padding-top: 0;
+  }
+
+  .dm-jump {
+    display: inline-flex;
+  }
+
+  .dm-steps {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+
+@media (max-width: 560px) {
+  .dm .fp form {
+    grid-template-columns: 1fr;
+  }
+
+  .dm .fp form > .note-field:nth-child(3),
+  .dm .fp form > .note-field:nth-child(4) {
+    grid-column: 1 / -1;
+  }
+
+  .dm-faq-a p {
+    padding-right: 0;
+  }
+}
