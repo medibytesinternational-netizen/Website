@@ -1,0 +1,5 @@
+# Client-side routing: serve index.html for any path the build has no file for,
+# so /demo and friends work when opened or refreshed directly.
+# Honoured by Netlify and Cloudflare Pages; other hosts need the same rewrite
+# configured on their side (see README).
+/*  /index.html  200

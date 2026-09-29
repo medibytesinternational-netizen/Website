@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { Header, Footer } from '../components/Chrome';
 import { PageHero, ModuleGrid, ClosingCta } from '../components/content';
 import { useSiteMotion } from '../hooks/useSiteMotion';
 import { useSeo } from '../hooks/useSeo';
+import { CAREERS_EMAIL } from '../config/site';
 
 const CULTURE = [
   {
@@ -40,66 +40,59 @@ export default function Careers() {
   useSiteMotion({ pinWorkflow: false, scrubVision: false, heroIntro: true });
 
   return (
-    <>
-      <Header active="careers" />
-      <main id="main">
-        <PageHero
-          id="careers-heading"
-          eyebrow="CAREERS AT MEDIBYTES"
-          lines={[
-            { text: 'Build the Future of' },
-            { text: 'Healthcare IT with Us.', green: true },
-          ]}
-          sub="We are rewriting the rules of hospital software. We want builders eager to give doctors their time back."
-          actions={
-            <a className="button primary" href="mailto:careers@medibytes.in">
-              Join Our Talent Network <ArrowRight aria-hidden="true" />
-            </a>
-          }
-        />
+    <main id="main">
+      <PageHero
+        id="careers-heading"
+        eyebrow="CAREERS AT MEDIBYTES"
+        lines={[{ text: 'Build the Future of' }, { text: 'Healthcare IT with Us.', green: true }]}
+        sub="We are rewriting the rules of hospital software. We want builders eager to give doctors their time back."
+        actions={
+          <a className="button primary" href={`mailto:${CAREERS_EMAIL}`}>
+            Join Our Talent Network <ArrowRight aria-hidden="true" />
+          </a>
+        }
+      />
 
-        <ModuleGrid
-          eyebrow="OUR CULTURE"
-          title="A culture built on solving real problems."
-          copy="Administrative bloat is actively burning out doctors. We are here to fix that."
-          modules={CULTURE}
-        />
+      <ModuleGrid
+        eyebrow="OUR CULTURE"
+        title="A culture built on solving real problems."
+        copy="Administrative bloat is actively burning out doctors. We are here to fix that."
+        modules={CULTURE}
+      />
 
-        <section className="faq container section">
-          <div className="faq-heading reveal">
-            <div className="eyebrow">OPEN ROLES</div>
-            <h2>
-              Where our hiring
-              <br />
-              stands right now.
-            </h2>
-          </div>
-          <div className="faq-list reveal">
-            <p style={{ maxWidth: 640 }}>
-              Here is the honest truth. We are currently fully staffed. Our core team is completely
-              heads-down building the product. But things change quickly — we are always on the
-              lookout for exceptional talent. If you know how to fix complex clinical workflows, we
-              want you on our radar.
-            </p>
-            <p style={{ maxWidth: 640, marginTop: 16 }}>
-              Drop your resume at{' '}
-              <a className="text-button" href="mailto:careers@medibytes.in">
-                careers@medibytes.in
-              </a>{' '}
-              to join our talent network for future opportunities.
-            </p>
-          </div>
-        </section>
+      <section className="faq container section">
+        <div className="faq-heading reveal">
+          <div className="eyebrow">OPEN ROLES</div>
+          <h2>
+            Where our hiring
+            <br />
+            stands right now.
+          </h2>
+        </div>
+        <div className="faq-list reveal">
+          <p style={{ maxWidth: 640 }}>
+            Here is the honest truth. We are currently fully staffed. Our core team is completely
+            heads-down building the product. But things change quickly — we are always on the
+            lookout for exceptional talent. If you know how to fix complex clinical workflows, we
+            want you on our radar.
+          </p>
+          <p style={{ maxWidth: 640, marginTop: 16 }}>
+            Drop your resume at{' '}
+            <a className="text-button" href={`mailto:${CAREERS_EMAIL}`}>
+              {CAREERS_EMAIL}
+            </a>{' '}
+            to join our talent network for future opportunities.
+          </p>
+        </div>
+      </section>
 
-        <ClosingCta
-          eyebrow="TALENT NETWORK"
-          title="Ready to build what matters?"
-          copy="Stop tweaking apps nobody needs. Help us strip away the administrative nightmare in modern medicine."
-          button="Email Your Resume"
-          to="mailto:careers@medibytes.in"
-        />
-      </main>
-      <Footer />
-    </>
+      <ClosingCta
+        eyebrow="TALENT NETWORK"
+        title="Ready to build what matters?"
+        copy="Stop tweaking apps nobody needs. Help us strip away the administrative nightmare in modern medicine."
+        button="Email Your Resume"
+        to={`mailto:${CAREERS_EMAIL}`}
+      />
+    </main>
   );
 }

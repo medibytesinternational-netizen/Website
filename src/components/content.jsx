@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Icon } from './icons';
+import BackgroundVideo from './BackgroundVideo';
+import { CONTACT_EMAIL } from '../config/site';
 
 /* ---------- Page hero (same .page-hero layout everywhere) ---------- */
 export function PageHero({ eyebrow, lines, sub, actions, id }) {
@@ -41,6 +43,56 @@ export function StatsBar({ label, stats }) {
         {group(3)}
       </div>
     </div>
+  );
+}
+
+/* ---------- Typing effect (types out once when scrolled into view) ---------- */
+export function TypingLine({ text, speed = 55 }) {
+  const ref = useRef(null);
+  const [count, setCount] = useState(() =>
+    typeof document !== 'undefined' &&
+    (document.documentElement.classList.contains('motion-paused') ||
+      (typeof window !== 'undefined' &&
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches))
+      ? text.length
+      : 0
+  );
+  useEffect(() => {
+    if (count >= text.length) return;
+    let iv = null;
+    const tick = () =>
+      setCount((c) => {
+        if (c + 1 >= text.length && iv) clearInterval(iv);
+        return Math.min(c + 1, text.length);
+      });
+    let io = null;
+    if ('IntersectionObserver' in window && ref.current) {
+      io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect();
+            io = null;
+            iv = setInterval(tick, speed);
+          }
+        },
+        { threshold: 0.4 }
+      );
+      io.observe(ref.current);
+    } else {
+      iv = setInterval(tick, speed);
+    }
+    return () => {
+      io?.disconnect();
+      if (iv) clearInterval(iv);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <span ref={ref} className="typing-line">
+      {text.slice(0, count)}
+      {count < text.length && <span className="typing-caret" aria-hidden="true" />}
+    </span>
   );
 }
 
@@ -151,25 +203,7 @@ export function ClosingCta({ eyebrow, title, copy, button, to = '/demo' }) {
   );
   return (
     <section className="contact-section container" id="demo-cta">
-      <video
-        className="cta-bg-video"
-        src="/cta-blend.mp4"
-        poster="/cards-bg.svg"
-        autoPlay
-        muted
-        defaultMuted
-        loop
-        playsInline
-        preload="metadata"
-        disablePictureInPicture
-        aria-hidden="true"
-        tabIndex={-1}
-        onCanPlay={(e) => {
-          e.currentTarget.muted = true;
-          e.currentTarget.classList.add('ready');
-          e.currentTarget.play().catch(() => {});
-        }}
-      />
+      <BackgroundVideo className="cta-bg-video" base="/cta-blend" poster="/cta-blend-poster.jpg" />
       <div className="contact-glow" aria-hidden="true"></div>
       <div className="eyebrow reveal">{eyebrow}</div>
       <h2 className="reveal">{title}</h2>
@@ -179,17 +213,32 @@ export function ClosingCta({ eyebrow, title, copy, button, to = '/demo' }) {
   );
 }
 
-/* ---------- Frontend-only form (note-field styling, success state) ---------- */
-export function MiniForm({ fields, button, successMsg, idPrefix }) {
+/* ---------- Enquiry form: hands the message to the visitor's email client ----------
+ *
+ * The site is a static build with no backend, so submitting opens a prefilled
+ * mail draft addressed to CONTACT_EMAIL. Nothing is stored or transmitted by
+ * the page itself, and the confirmation only claims what actually happened —
+ * a draft was opened — so no enquiry can be silently lost.
+ */
+export function MiniForm({ fields, button, subject, idPrefix }) {
   const [values, setValues] = useState(() =>
     Object.fromEntries(Object.keys(fields).map((k) => [k, '']))
   );
   const [error, setError] = useState('');
-  const [sent, setSent] = useState(false);
+  const [handedOff, setHandedOff] = useState(false);
 
   const onChange = (key) => (e) => {
     setValues((v) => ({ ...v, [key]: e.target.value }));
     setError('');
+  };
+
+  const buildMailto = () => {
+    const body = Object.entries(fields)
+      .map(([key, cfg]) => `${cfg.label}: ${values[key].trim()}`)
+      .join('\n');
+    return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
   };
 
   const send = (e) => {
@@ -205,16 +254,9 @@ export function MiniForm({ fields, button, successMsg, idPrefix }) {
       setError('That email doesn’t look right — please check it.');
       return;
     }
-    setSent(true);
+    window.location.href = buildMailto();
+    setHandedOff(true);
   };
-
-  if (sent) {
-    return (
-      <p className="deployment-caption" role="status" style={{ textAlign: 'left' }}>
-        {successMsg}
-      </p>
-    );
-  }
 
   return (
     <form onSubmit={send} noValidate>
@@ -226,27 +268,22 @@ export function MiniForm({ fields, button, successMsg, idPrefix }) {
           {cfg.multiline ? (
             <textarea
               id={`${idPrefix}-${key}`}
+              name={key}
               value={values[key]}
               onChange={onChange(key)}
               rows={4}
-              aria-label={cfg.label}
-              style={{
-                fontSize: 11,
-                color: '#0F2A4D',
-                background: '#F0F7FF',
-                border: '1px solid var(--line)',
-                borderRadius: 4,
-                padding: 9,
-                width: '100%',
-                fontFamily: 'inherit',
-              }}
+              autoComplete={cfg.autoComplete}
+              placeholder={cfg.placeholder}
             />
           ) : (
             <input
               id={`${idPrefix}-${key}`}
+              name={key}
+              type={cfg.type ?? 'text'}
+              inputMode={cfg.inputMode}
+              autoComplete={cfg.autoComplete}
               value={values[key]}
               onChange={onChange(key)}
-              aria-label={cfg.label}
               placeholder={cfg.placeholder}
             />
           )}
@@ -260,6 +297,14 @@ export function MiniForm({ fields, button, successMsg, idPrefix }) {
       <button type="submit" className="button primary">
         {button} <ArrowRight aria-hidden="true" />
       </button>
+      <p role="status" className="form-note">
+        {handedOff
+          ? 'Your email app should now hold a draft addressed to us — press send there and it reaches a real person. '
+          : 'This opens a prefilled draft in your email app so you can review it before sending. '}
+        <a className="text-button" href={`mailto:${CONTACT_EMAIL}`}>
+          {CONTACT_EMAIL}
+        </a>
+      </p>
     </form>
   );
 }

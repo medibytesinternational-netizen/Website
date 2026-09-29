@@ -77,11 +77,18 @@ export function useSiteMotion({ pinWorkflow = false, scrubVision = false, heroIn
         // .hero-in / .product-shell wrappers instead. Plays immediately so
         // reload never flashes then replays (video fades independently).
         if (heroIntro && document.querySelector('.headline-line')) {
+          // Only the home hero has a .product-shell, so each step is added
+          // when its target exists — GSAP warns about empty targets otherwise.
+          const step = (selector) => document.querySelector(selector);
           const intro = gsap
             .timeline({ defaults: { ease: 'power3.out' }, onComplete: () => ScrollTrigger.refresh() })
-            .fromTo('.headline-line', { opacity: 0 }, { opacity: 1, duration: 0.9, stagger: 0.12 })
-            .fromTo('.hero-in', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.75, stagger: 0.1 }, 0.15)
-            .fromTo('.product-shell', { y: 65, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, clearProps: 'transform' }, 0.4);
+            .fromTo('.headline-line', { opacity: 0 }, { opacity: 1, duration: 0.9, stagger: 0.12 });
+          if (step('.hero-in')) {
+            intro.fromTo('.hero-in', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.75, stagger: 0.1 }, 0.15);
+          }
+          if (step('.product-shell')) {
+            intro.fromTo('.product-shell', { y: 65, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, clearProps: 'transform' }, 0.4);
+          }
           intro.play();
         }
 
@@ -125,7 +132,9 @@ export function useSiteMotion({ pinWorkflow = false, scrubVision = false, heroIn
 
         // 4b. Checklist rows: slide in from the left, one after another.
         gsap.utils.toArray('.check-list').forEach((list) => {
-          gsap.from(list.querySelectorAll(':scope > *'), {
+          const rows = list.querySelectorAll(':scope > *');
+          if (!rows.length) return;
+          gsap.from(rows, {
             x: -32,
             opacity: 0,
             duration: 0.7,

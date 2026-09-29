@@ -29,7 +29,6 @@ const COMPANY_LINKS = [
   ["Founder's story", '/founders'],
   ['Careers', '/careers'],
   ['Contact us', '/contact'],
-  ['Our vision', '/vision'],
 ];
 
 function Drop({ id, label, links, extra, openDrop, setOpenDrop, closeMobile }) {
@@ -91,7 +90,11 @@ export function Header() {
       }
     };
     const onPointer = (e) => {
-      if (navRef.current && !navRef.current.contains(e.target) && !menuRef.current?.contains(e.target)) {
+      if (
+        navRef.current &&
+        !navRef.current.contains(e.target) &&
+        !menuRef.current?.contains(e.target)
+      ) {
         closeMobile();
       }
     };
@@ -120,7 +123,12 @@ export function Header() {
           <Link className="brand" to="/" aria-label="MediBytes home" onClick={closeMobile}>
             <Logo />
           </Link>
-          <nav id="nav" aria-label="Main navigation" ref={navRef} className={mobileOpen ? 'open' : undefined}>
+          <nav
+            id="nav"
+            aria-label="Main navigation"
+            ref={navRef}
+            className={mobileOpen ? 'open' : undefined}
+          >
             <NavLink to="/" className={navLinkClass} end onClick={closeMobile}>
               Home
             </NavLink>
@@ -153,7 +161,7 @@ export function Header() {
             />
           </nav>
           <Link className="button nav-cta" to="/demo" onClick={closeMobile}>
-            Book a demo <ArrowUpRight aria-hidden="true" />
+            Book a walkthrough <ArrowUpRight aria-hidden="true" />
           </Link>
           <button
             ref={menuRef}
@@ -256,7 +264,7 @@ const FOOT_LINKS = [
       ['OPD Documentation', '/hospitals'],
       ['IPD Documentation', '/hospitals'],
       ['Clinical Intelligence', '/how-it-works#platform'],
-      ['Book a demo', '/demo'],
+      ['Book a walkthrough', '/demo'],
     ],
   },
   {
@@ -266,13 +274,12 @@ const FOOT_LINKS = [
       ["Founder's story", '/founders'],
       ['Careers', '/careers'],
       ['Contact us', '/contact'],
-      ['Our vision', '/vision'],
     ],
   },
   {
     title: 'Resources',
     links: [
-      ['FAQs', '/vision#faqs'],
+      ['FAQs', '/demo#faqs'],
       ['Technology & deployment', '/hospitals#deployment'],
       ['Workflow', '/how-it-works#workflow'],
       ['Contact', '/contact'],
@@ -301,7 +308,12 @@ export function Footer() {
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-16 md:py-24 flex flex-col lg:flex-row justify-between gap-16 lg:gap-8">
           <div className="flex flex-col justify-between max-w-sm w-full">
             <div className="flex flex-col">
-              <Link className="brand mb-2" to="/" aria-label="MediBytes home" style={{ color: '#fff' }}>
+              <Link
+                className="brand mb-2"
+                to="/"
+                aria-label="MediBytes home"
+                style={{ color: '#fff' }}
+              >
                 <Logo />
               </Link>
               <h2 className="text-white text-xl md:text-[22px] font-medium leading-tight">
@@ -312,18 +324,41 @@ export function Footer() {
             </div>
 
             <div className="flex flex-col gap-3 mt-12 lg:mt-auto pt-8">
-              <svg width="312" height="34" viewBox="0 0 312 34" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 w-[180px] md:w-[200px] h-auto" aria-hidden="true">
-                <path d="M12.673 20.703L18.427 28.375H26.885L17.39 15.714L25.29 6.625H22.088L15.905 13.737L10.573 6.625H2.115L11.189 18.727L2.803 28.375H6.005L12.673 20.703ZM19.635 25.958L6.948 9.042H9.364L22.052 25.958H19.635Z" fill="#FFFFFF" />
-                <path d="M68.75 5.75C69.413 5.75 70.049 6.013 70.518 6.482C70.987 6.951 71.25 7.587 71.25 8.25V25.75C71.25 26.413 70.987 27.049 70.518 27.518C70.049 27.987 69.413 28.25 68.75 28.25H51.25C50.587 28.25 49.951 27.987 49.482 27.518C49.013 27.049 48.75 26.413 48.75 25.75V8.25C48.75 7.587 49.013 6.951 49.482 6.482C49.951 6.013 50.587 5.75 51.25 5.75H68.75ZM68.125 25.125V18.5C68.125 17.419 67.696 16.383 66.931 15.618C66.167 14.854 65.131 14.425 64.05 14.425C62.987 14.425 61.75 15.075 61.15 16.05V14.662H57.663V25.125H61.15V18.962C61.15 18 61.925 17.212 62.888 17.212C63.352 17.212 63.797 17.397 64.125 17.725C64.453 18.053 64.638 18.498 64.638 18.962V25.125H68.125ZM53.6 12.7C54.157 12.7 54.691 12.479 55.085 12.085C55.479 11.691 55.7 11.157 55.7 10.6C55.7 9.438 54.763 8.488 53.6 8.488C53.04 8.488 52.502 8.71 52.106 9.106C51.71 9.502 51.487 10.04 51.487 10.6C51.487 11.762 52.438 12.7 53.6 12.7ZM55.337 25.125V14.662H51.875V25.125H55.337Z" fill="#FFFFFF" />
-                <path d="M124.167 17C124.167 9.18 117.82 2.833 110 2.833C102.18 2.833 95.833 9.18 95.833 17C95.833 23.857 100.707 29.566 107.167 30.883V21.25H104.333V17H107.167V13.458C107.167 10.724 109.391 8.5 112.125 8.5H115.667V12.75H112.833C112.054 12.75 111.417 13.387 111.417 14.167V17H115.667V21.25H111.417V31.096C118.571 30.387 124.167 24.352 124.167 17Z" fill="#FFFFFF" />
-                <path d="M200.1 6.333H209.9C213.633 6.333 216.667 9.367 216.667 13.1V22.9C216.667 24.695 215.954 26.416 214.685 27.685C213.416 28.954 211.695 29.667 209.9 29.667H200.1C196.367 29.667 193.333 26.633 193.333 22.9V13.1C193.333 11.305 194.046 9.584 195.315 8.315C196.584 7.046 198.305 6.333 200.1 6.333ZM205 12.167C206.547 12.167 208.031 12.781 209.125 13.875C210.219 14.969 210.833 16.453 210.833 18C210.833 19.547 210.219 21.031 209.125 22.125C208.031 23.219 206.547 23.833 205 23.833C203.453 23.833 201.969 23.219 200.875 22.125C199.781 21.031 199.167 19.547 199.167 18C199.167 16.453 199.781 14.969 200.875 13.875C201.969 12.781 203.453 12.167 205 12.167Z" fill="#FFFFFF" />
-                <path d="M311.209 8.588C310.88 7.356 309.909 6.385 308.677 6.055C306.443 5.457 297.484 5.457 297.484 5.457C297.484 5.457 288.525 5.457 286.291 6.055C285.059 6.385 284.088 7.356 283.758 8.588C283.159 10.822 283.159 15.484 283.159 15.484C283.159 15.484 283.159 20.145 283.758 22.379C284.088 23.612 285.059 24.583 286.291 24.912C288.525 25.511 297.484 25.511 297.484 25.511C297.484 25.511 306.443 25.511 308.677 24.912C309.909 24.583 310.88 23.612 311.209 22.379C311.808 20.145 311.808 15.484 311.808 15.484C311.808 15.484 311.808 10.822 311.209 8.588ZM294.619 19.781V11.186L302.062 15.484L294.619 19.781Z" fill="#FFFFFF" />
+              <svg
+                width="312"
+                height="34"
+                viewBox="0 0 312 34"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="shrink-0 w-[180px] md:w-[200px] h-auto"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12.673 20.703L18.427 28.375H26.885L17.39 15.714L25.29 6.625H22.088L15.905 13.737L10.573 6.625H2.115L11.189 18.727L2.803 28.375H6.005L12.673 20.703ZM19.635 25.958L6.948 9.042H9.364L22.052 25.958H19.635Z"
+                  fill="#FFFFFF"
+                />
+                <path
+                  d="M68.75 5.75C69.413 5.75 70.049 6.013 70.518 6.482C70.987 6.951 71.25 7.587 71.25 8.25V25.75C71.25 26.413 70.987 27.049 70.518 27.518C70.049 27.987 69.413 28.25 68.75 28.25H51.25C50.587 28.25 49.951 27.987 49.482 27.518C49.013 27.049 48.75 26.413 48.75 25.75V8.25C48.75 7.587 49.013 6.951 49.482 6.482C49.951 6.013 50.587 5.75 51.25 5.75H68.75ZM68.125 25.125V18.5C68.125 17.419 67.696 16.383 66.931 15.618C66.167 14.854 65.131 14.425 64.05 14.425C62.987 14.425 61.75 15.075 61.15 16.05V14.662H57.663V25.125H61.15V18.962C61.15 18 61.925 17.212 62.888 17.212C63.352 17.212 63.797 17.397 64.125 17.725C64.453 18.053 64.638 18.498 64.638 18.962V25.125H68.125ZM53.6 12.7C54.157 12.7 54.691 12.479 55.085 12.085C55.479 11.691 55.7 11.157 55.7 10.6C55.7 9.438 54.763 8.488 53.6 8.488C53.04 8.488 52.502 8.71 52.106 9.106C51.71 9.502 51.487 10.04 51.487 10.6C51.487 11.762 52.438 12.7 53.6 12.7ZM55.337 25.125V14.662H51.875V25.125H55.337Z"
+                  fill="#FFFFFF"
+                />
+                <path
+                  d="M124.167 17C124.167 9.18 117.82 2.833 110 2.833C102.18 2.833 95.833 9.18 95.833 17C95.833 23.857 100.707 29.566 107.167 30.883V21.25H104.333V17H107.167V13.458C107.167 10.724 109.391 8.5 112.125 8.5H115.667V12.75H112.833C112.054 12.75 111.417 13.387 111.417 14.167V17H115.667V21.25H111.417V31.096C118.571 30.387 124.167 24.352 124.167 17Z"
+                  fill="#FFFFFF"
+                />
+                <path
+                  d="M200.1 6.333H209.9C213.633 6.333 216.667 9.367 216.667 13.1V22.9C216.667 24.695 215.954 26.416 214.685 27.685C213.416 28.954 211.695 29.667 209.9 29.667H200.1C196.367 29.667 193.333 26.633 193.333 22.9V13.1C193.333 11.305 194.046 9.584 195.315 8.315C196.584 7.046 198.305 6.333 200.1 6.333ZM205 12.167C206.547 12.167 208.031 12.781 209.125 13.875C210.219 14.969 210.833 16.453 210.833 18C210.833 19.547 210.219 21.031 209.125 22.125C208.031 23.219 206.547 23.833 205 23.833C203.453 23.833 201.969 23.219 200.875 22.125C199.781 21.031 199.167 19.547 199.167 18C199.167 16.453 199.781 14.969 200.875 13.875C201.969 12.781 203.453 12.167 205 12.167Z"
+                  fill="#FFFFFF"
+                />
+                <path
+                  d="M311.209 8.588C310.88 7.356 309.909 6.385 308.677 6.055C306.443 5.457 297.484 5.457 297.484 5.457C297.484 5.457 288.525 5.457 286.291 6.055C285.059 6.385 284.088 7.356 283.758 8.588C283.159 10.822 283.159 15.484 283.159 15.484C283.159 15.484 283.159 20.145 283.758 22.379C284.088 23.612 285.059 24.583 286.291 24.912C288.525 25.511 297.484 25.511 297.484 25.511C297.484 25.511 306.443 25.511 308.677 24.912C309.909 24.583 310.88 23.612 311.209 22.379C311.808 20.145 311.808 15.484 311.808 15.484C311.808 15.484 311.808 10.822 311.209 8.588ZM294.619 19.781V11.186L302.062 15.484L294.619 19.781Z"
+                  fill="#FFFFFF"
+                />
               </svg>
-              <p className="font-light text-white/80 text-xs md:text-[13px] mt-1">
+              <p className="font-light text-white text-xs md:text-[13px] mt-1">
                 © {new Date().getFullYear()} MediBytes, All rights reserved
               </p>
-              <p className="font-light text-white/60 text-xs">
-                Product in development · Concept demonstration only
+              <p className="font-light text-white text-xs">
+                Product in development · The interactive preview is illustrative
               </p>
               <button
                 id="motion-toggle"

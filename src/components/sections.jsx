@@ -5,7 +5,7 @@ import { ArrowRight, ArrowUpRight } from 'lucide-react';
 export const FAQ_ITEMS = [
   [
     'Is MediBytes available to use today?',
-    'MediBytes is currently in development. This website presents the product direction and an interactive concept, not a live clinical documentation service. Pilot availability will follow product validation.',
+    'Not yet. MediBytes is in development, and this website presents the product direction and an interactive concept rather than a live clinical documentation service. Pilot availability will follow product validation — but you can book a walkthrough with the team today and see exactly where things stand.',
   ],
   [
     'Which languages are planned?',
@@ -310,9 +310,7 @@ export function DeploymentSection() {
             <br />
             And your infrastructure.
           </h2>
-          <p>
-            Two planned deployment paths. The same commitment to clinician-led documentation.
-          </p>
+          <p>Two planned deployment paths. The same commitment to clinician-led documentation.</p>
         </div>
       </div>
       <div className="deployment-grid">
@@ -369,71 +367,6 @@ export function DeploymentSection() {
   );
 }
 
-export function VisionSection() {
-  return (
-    <section className="vision-section" id="vision">
-      <div className="container">
-        <div className="vision-top reveal">
-          <span className="eyebrow">THE MEDIBYTES VISION</span>
-          <span className="outlined-tag">Currently in development</span>
-        </div>
-        <h2 className="vision-statement">
-          The next chapter of healthcare should have <span>more human connection.</span> Not more
-          paperwork.
-        </h2>
-        <div className="vision-bottom reveal">
-          <p>
-            We’re building a future where clinical documentation begins with a conversation, and
-            ends with clarity. Starting with multilingual voice, meaningful review, and workflows
-            that respect the clinician.
-          </p>
-          <Link className="text-button" to="/vision#connect">
-            Build that future with us <ArrowUpRight aria-hidden="true" />
-          </Link>
-        </div>
-        <div className="roadmap reveal">
-          <div>
-            <span className="roadmap-dot current"></span>
-            <strong>Build</strong>
-            <span>Core voice-to-template workflow</span>
-            <small>In progress</small>
-          </div>
-          <div>
-            <span className="roadmap-dot"></span>
-            <strong>Validate</strong>
-            <span>Clinician feedback and pilot evaluation</span>
-            <small>Planned</small>
-          </div>
-          <div>
-            <span className="roadmap-dot"></span>
-            <strong>Scale</strong>
-            <span>Hospital integrations and deployment</span>
-            <small>Planned</small>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function FaqSection({ items = FAQ_ITEMS }) {
-  return (
-    <section className="faq container section" id="faqs">
-      <div className="faq-heading reveal">
-        <div className="eyebrow">A LITTLE MORE CLARITY</div>
-        <h2>
-          Good questions.
-          <br />
-          Clear answers.
-        </h2>
-      </div>
-      <div className="faq-list reveal">
-        <FaqList items={items} />
-      </div>
-    </section>
-  );
-}
-
 export function ContactSection() {
   return (
     <section className="contact-section container" id="connect">
@@ -462,11 +395,11 @@ export function ContactSection() {
       <div id="partnership-info" className="partnership-info" hidden>
         <h3>Let’s shape MediBytes together.</h3>
         <p>
-          Clinical pilot and investor conversations are planned as the product develops. Meeting
-          bookings are not open on this site yet.
+          We’re talking to hospitals about the first clinical pilots, and to investors about what
+          comes after. Book a walkthrough and let’s start there.
         </p>
-        <Link className="text-button" to="/how-it-works#workflow">
-          Explore the planned workflow <ArrowRight aria-hidden="true" />
+        <Link className="text-button" to="/demo">
+          Book a walkthrough <ArrowRight aria-hidden="true" />
         </Link>
       </div>
     </section>
@@ -493,10 +426,10 @@ export function CtaBand() {
             See deployment <ArrowRight aria-hidden="true" />
           </span>
         </Link>
-        <Link className="cta-card reveal" to="/vision">
-          <span className="eyebrow">03 — Vision &amp; contact</span>
+        <Link className="cta-card reveal" to="/contact">
+          <span className="eyebrow">03 — Talk to us</span>
           <h3>More human connection.</h3>
-          <p>Roadmap, FAQs, and partnership conversations.</p>
+          <p>Partnership conversations and pilot walkthroughs.</p>
           <span className="text-button">
             Meet MediBytes <ArrowRight aria-hidden="true" />
           </span>
