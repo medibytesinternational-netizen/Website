@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Icon } from './icons';
@@ -43,56 +43,6 @@ export function StatsBar({ label, stats }) {
         {group(3)}
       </div>
     </div>
-  );
-}
-
-/* ---------- Typing effect (types out once when scrolled into view) ---------- */
-export function TypingLine({ text, speed = 55 }) {
-  const ref = useRef(null);
-  const [count, setCount] = useState(() =>
-    typeof document !== 'undefined' &&
-    (document.documentElement.classList.contains('motion-paused') ||
-      (typeof window !== 'undefined' &&
-        typeof window.matchMedia === 'function' &&
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches))
-      ? text.length
-      : 0
-  );
-  useEffect(() => {
-    if (count >= text.length) return;
-    let iv = null;
-    const tick = () =>
-      setCount((c) => {
-        if (c + 1 >= text.length && iv) clearInterval(iv);
-        return Math.min(c + 1, text.length);
-      });
-    let io = null;
-    if ('IntersectionObserver' in window && ref.current) {
-      io = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((e) => e.isIntersecting)) {
-            io.disconnect();
-            io = null;
-            iv = setInterval(tick, speed);
-          }
-        },
-        { threshold: 0.4 }
-      );
-      io.observe(ref.current);
-    } else {
-      iv = setInterval(tick, speed);
-    }
-    return () => {
-      io?.disconnect();
-      if (iv) clearInterval(iv);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  return (
-    <span ref={ref} className="typing-line">
-      {text.slice(0, count)}
-      {count < text.length && <span className="typing-caret" aria-hidden="true" />}
-    </span>
   );
 }
 

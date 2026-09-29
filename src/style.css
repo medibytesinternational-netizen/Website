@@ -434,13 +434,18 @@ footer a:hover{color:#fff}
 /* about vision statement: full white headline */
 #about-vision .vision-statement,#about-vision .vision-statement>span{background:none !important;color:#fff !important;-webkit-text-fill-color:#fff !important}
 footer button{color:rgba(255,255,255,.8)}
-/* typing caret for typewriter lines */
-.typing-caret{display:inline-block;width:3px;height:1em;margin-left:3px;border-radius:2px;background:var(--primary-deep);vertical-align:-0.12em;animation:caret-blink 1s steps(1) infinite}
-@keyframes caret-blink{50%{opacity:0}}
-.motion-paused .typing-caret{display:none}
 /* smart-tools cards: buttons sit on one parallel line */
 .teaser-card{display:flex;flex-direction:column}
 .teaser-card .teaser-cta{margin-top:auto;padding-top:24px}
+/* footer social icons */
+.social-links a{display:inline-flex;transition:opacity .2s ease,transform .2s ease}
+.social-links a:hover{opacity:.7;transform:translateY(-2px)}
 /* button arrows slide on hover */
 .button svg,.text-button svg{transition:transform .25s ease}
 .button:hover svg,.text-button:hover svg{transform:translateX(4px)}
+/* in-menu CTA exists for the mobile menu only — desktop keeps the header button */
+.nav-cta-menu{display:none}
+@media(max-width:700px){
+.nav-wrap>.nav-cta{display:none}
+nav .nav-cta-menu{display:inline-flex;width:100%;margin:6px 0 2px;min-height:46px}
+}

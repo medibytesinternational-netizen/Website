@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { FaqList } from '../components/sections';
-import { StatsBar, ChecklistSection, ModuleGrid, ClosingCta, TypingLine } from '../components/content';
+import { StatsBar, ChecklistSection, ModuleGrid, ClosingCta } from '../components/content';
 import ProductPreview from '../components/ProductPreview';
 import BackgroundVideo from '../components/BackgroundVideo';
 import { useSiteMotion } from '../hooks/useSiteMotion';
@@ -89,17 +89,16 @@ export default function Home() {
         <div className="container hero-inner">
           <div className="hero-copy">
             <div className="eyebrow hero-in">
-              <span className="status-dot"></span> IN DEVELOPMENT · BUILDING WITH INDIAN HOSPITALS
+                <span className="status-dot"></span> AI FOR DOCUMENTATION
             </div>
             <h1 id="hero-heading">
               <span className="headline-line">Speak. We document.</span>
               <span className="headline-line green">You always sign off.</span>
             </h1>
             <p className="hero-in">
-              Medibytes is an AI documentation layer for Indian hospitals. It sits over the HMIS you
-              already run — no migration, no new system to learn. Doctors dictate; structured,
-              template-aware notes take shape, with every field traceable to the moment it was said.
-              Nothing is filed until a clinician verifies it.
+              Medibytes layers over your existing HMIS — no migration, no new system to
+              learn. Doctors dictate; structured, traceable notes take shape, verified by a
+              clinician before anything is filed.
             </p>
             <div className="hero-actions hero-in">
               <Link className="button primary" to="/demo">
@@ -131,10 +130,10 @@ export default function Home() {
         <div className="section-intro reveal">
           <div className="eyebrow">PHYSICIAN BURNOUT</div>
           <div className="intro-row">
-              <h2 id="burnout-heading" aria-label="Let's talk about physician burnout.">
+              <h2 id="burnout-heading">
                 Let&apos;s talk about
                 <br />
-                <TypingLine text="physician burnout." />
+                physician burnout.
               </h2>
             <p>
               It almost always starts with data entry. Administrative overload is quietly destroying
@@ -278,7 +277,7 @@ export default function Home() {
 
       <ClosingCta
         eyebrow="WALKTHROUGH"
-        title="Let's look at your documentation load."
+          title="Let's look at your documentation load."
         copy="Bring us the part of your documentation that hurts most. We will show you what we have built, where it already helps, and where it is not finished yet."
         button="Book a walkthrough"
       />

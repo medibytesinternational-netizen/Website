@@ -27,3 +27,15 @@ export const OFFICE_ADDRESS = {
 };
 
 export const SITE_URL = 'https://medibytesinternational.com';
+
+/**
+ * Social profiles, shown as icons in the footer. Replace the '#' holders
+ * with the real profile URLs and they go live everywhere at once.
+ */
+export const SOCIAL_URLS = {
+  linkedin: '#',
+  x: '#',
+  instagram: '#',
+  youtube: '#',
+  facebook: '#',
+};
