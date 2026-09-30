@@ -16,6 +16,8 @@ const Careers = lazy(() => import('./pages/Careers'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Demo = lazy(() => import('./pages/Demo'));
 const Founders = lazy(() => import('./pages/Founders'));
+const AdminLogin = lazy(() => import('./pages/admin/Login'));
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
 
 function ScrollManager() {
   const { pathname, hash } = useLocation();
@@ -137,6 +139,8 @@ export default function App() {
       <ScrollManager />
       <Suspense fallback={<main id="main" style={{ minHeight: '60vh' }} />}>
         <Routes>
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/features" element={<Features />} />

@@ -4,10 +4,24 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // Website form submissions. The public site may only create well-formed
-    // enquiries; reading, editing and deleting happen in the Firebase console.
+    // enquiries; admins (below) read them in the /admin dashboard, can mark
+    // them handled and can delete them.
     match /enquiries/{id} {
       allow create: if validEnquiry(request.resource.data);
-      allow read, update, delete: if false;
+      allow read, delete: if isAdmin();
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+        && request.resource.data.status in ['new', 'handled'];
+    }
+
+    // Accounts allowed into the dashboard. Each must also exist in Firebase
+    // Authentication (email/password); add an email here and redeploy rules.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'password'
+        && request.auth.token.email in [
+          'medibytesinternational@gmail.com'
+        ];
     }
 
     function shortString(v, max) {
