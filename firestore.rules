@@ -1,0 +1,42 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Website form submissions. The public site may only create well-formed
+    // enquiries; reading, editing and deleting happen in the Firebase console.
+    match /enquiries/{id} {
+      allow create: if validEnquiry(request.resource.data);
+      allow read, update, delete: if false;
+    }
+
+    function shortString(v, max) {
+      return v is string && v.size() > 0 && v.size() <= max;
+    }
+
+    function validEnquiry(d) {
+      return d.keys().hasOnly(['form', 'fields', 'page', 'createdAt'])
+        && d.createdAt == request.time
+        && d.page is string && d.page.size() <= 200
+        && d.fields is map
+        && ((d.form == 'contact'
+              && d.fields.keys().hasOnly(['name', 'email', 'message'])
+              && d.fields.keys().hasAll(['name', 'email', 'message'])
+              && shortString(d.fields.name, 200)
+              && shortString(d.fields.email, 320)
+              && shortString(d.fields.message, 5000))
+          || (d.form == 'demo'
+              && d.fields.keys().hasOnly(['name', 'email', 'facility', 'whatsapp'])
+              && d.fields.keys().hasAll(['name', 'email', 'facility', 'whatsapp'])
+              && shortString(d.fields.name, 200)
+              && shortString(d.fields.email, 320)
+              && shortString(d.fields.facility, 200)
+              && shortString(d.fields.whatsapp, 40)));
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -5,6 +5,7 @@ import { Icon } from './icons';
 import ScrollStack, { ScrollStackItem } from './ScrollStack';
 import BackgroundVideo from './BackgroundVideo';
 import { CONTACT_EMAIL } from '../config/site';
+import { enquiriesEnabled, saveEnquiry } from '../lib/enquiries';
 
 /* ---------- Page hero (same .page-hero layout everywhere) ---------- */
 export function PageHero({ eyebrow, lines, sub, actions, id }) {
@@ -204,12 +205,12 @@ export function ClosingCta({ eyebrow, title, copy, button, to = '/demo' }) {
   );
 }
 
-/* ---------- Enquiry form: hands the message to the visitor's email client ----------
+/* ---------- Enquiry form: saves to Firestore, falls back to email ----------
  *
- * The site is a static build with no backend, so submitting opens a prefilled
- * mail draft addressed to CONTACT_EMAIL. Nothing is stored or transmitted by
- * the page itself, and the confirmation only claims what actually happened —
- * a draft was opened — so no enquiry can be silently lost.
+ * Submissions are stored in the Firestore `enquiries` collection (tagged with
+ * idPrefix as the form name). If Firebase isn't configured or the write fails,
+ * submitting opens a prefilled mail draft to CONTACT_EMAIL instead, and the
+ * confirmation only claims what actually happened — so no enquiry is lost.
  */
 export function MiniForm({ fields, button, subject, idPrefix }) {
   const [values, setValues] = useState(() =>
@@ -217,6 +218,7 @@ export function MiniForm({ fields, button, subject, idPrefix }) {
   );
   const [error, setError] = useState('');
   const [handedOff, setHandedOff] = useState(false);
+  const [status, setStatus] = useState('idle'); // idle | sending | saved
 
   const onChange = (key) => (e) => {
     setValues((v) => ({ ...v, [key]: e.target.value }));
@@ -232,7 +234,7 @@ export function MiniForm({ fields, button, subject, idPrefix }) {
     )}&body=${encodeURIComponent(body)}`;
   };
 
-  const send = (e) => {
+  const send = async (e) => {
     e.preventDefault();
     const emptyKey = Object.keys(fields).find((k) => !values[k].trim());
     if (emptyKey) {
@@ -244,6 +246,21 @@ export function MiniForm({ fields, button, subject, idPrefix }) {
     if (emailKey && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values[emailKey])) {
       setError('That email doesn’t look right — please check it.');
       return;
+    }
+    const trimmed = Object.fromEntries(
+      Object.entries(values).map(([k, v]) => [k, v.trim()])
+    );
+    if (enquiriesEnabled) {
+      setStatus('sending');
+      try {
+        await saveEnquiry(idPrefix, trimmed);
+        setStatus('saved');
+        setValues(Object.fromEntries(Object.keys(fields).map((k) => [k, ''])));
+        return;
+      } catch (err) {
+        console.error('Enquiry could not be saved, falling back to email', err);
+        setStatus('idle');
+      }
     }
     window.location.href = buildMailto();
     setHandedOff(true);
@@ -285,13 +302,17 @@ export function MiniForm({ fields, button, subject, idPrefix }) {
           {error}
         </p>
       )}
-      <button type="submit" className="button primary">
-        {button} <ArrowRight aria-hidden="true" />
+      <button type="submit" className="button primary" disabled={status === 'sending'}>
+        {status === 'sending' ? 'Sending…' : button} <ArrowRight aria-hidden="true" />
       </button>
       <p role="status" className="form-note">
-        {handedOff
-          ? 'Your email app should now hold a draft addressed to us — press send there and it reaches a real person. '
-          : 'This opens a prefilled draft in your email app so you can review it before sending. '}
+        {status === 'saved'
+          ? 'Thanks — we’ve received your message and a real person will reply soon. '
+          : handedOff
+            ? 'Your email app should now hold a draft addressed to us — press send there and it reaches a real person. '
+            : enquiriesEnabled
+              ? 'Prefer email? Write to us directly: '
+              : 'This opens a prefilled draft in your email app so you can review it before sending. '}
         <a className="text-button" href={`mailto:${CONTACT_EMAIL}`}>
           {CONTACT_EMAIL}
         </a>
