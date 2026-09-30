@@ -1,27 +1,72 @@
 rules_version = '2';
 
+// Roles (RBAC) for the /admin dashboard:
+//   owner  – OWNER_EMAIL below; always an admin, can't be removed or demoted.
+//   admin  – view, mark handled, export, delete enquiries; manage the team.
+//   user   – view, mark handled, export enquiries.
+// Team members live in /roles/{email} ({ role: 'admin' | 'user' }), managed
+// from the dashboard's Team tab. Every signed-in account must have a verified
+// email, so nobody can claim an invited address by registering it first.
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Website form submissions. The public site may only create well-formed
-    // enquiries; admins (below) read them in the /admin dashboard, can mark
-    // them handled and can delete them.
-    match /enquiries/{id} {
-      allow create: if validEnquiry(request.resource.data);
-      allow read, delete: if isAdmin();
-      allow update: if isAdmin()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
-        && request.resource.data.status in ['new', 'handled'];
+    function ownerEmail() {
+      return 'medibytesinternational@gmail.com';
     }
 
-    // Accounts allowed into the dashboard. Each must also exist in Firebase
-    // Authentication (email/password); add an email here and redeploy rules.
-    function isAdmin() {
+    function verified() {
       return request.auth != null
         && request.auth.token.firebase.sign_in_provider == 'password'
-        && request.auth.token.email in [
-          'medibytesinternational@gmail.com'
-        ];
+        && request.auth.token.email_verified == true;
+    }
+
+    function myEmail() {
+      return request.auth.token.email.lower();
+    }
+
+    function isOwner() {
+      return verified() && myEmail() == ownerEmail();
+    }
+
+    function myRole() {
+      let path = /databases/$(database)/documents/roles/$(myEmail());
+      return exists(path) ? get(path).data.role : null;
+    }
+
+    function isAdmin() {
+      return isOwner() || (verified() && myRole() == 'admin');
+    }
+
+    function isStaff() {
+      return isAdmin() || (verified() && myRole() == 'user');
+    }
+
+    // ---------- Enquiries (website form submissions) ----------
+    match /enquiries/{id} {
+      allow create: if validEnquiry(request.resource.data);
+      allow read: if isStaff();
+      allow update: if isStaff()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+        && request.resource.data.status in ['new', 'handled'];
+      allow delete: if isAdmin();
+    }
+
+    // ---------- Team roles ----------
+    match /roles/{email} {
+      // Everyone can read their own role; admins see the whole team.
+      allow read: if verified() && (email == myEmail() || isAdmin());
+      // Admins manage everyone except themselves and the owner.
+      allow create, update: if isAdmin()
+        && email != myEmail()
+        && email != ownerEmail()
+        && email == email.lower()
+        && email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && request.resource.data.keys().hasOnly(['role', 'addedBy', 'addedAt'])
+        && request.resource.data.role in ['admin', 'user']
+        && request.resource.data.addedBy == myEmail()
+        && request.resource.data.addedAt == request.time;
+      allow delete: if isAdmin() && email != myEmail();
     }
 
     function shortString(v, max) {

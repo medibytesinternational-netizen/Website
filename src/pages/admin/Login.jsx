@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 import { LockKeyhole } from 'lucide-react';
 import { auth, useAuthUser } from '../../lib/auth';
 import { useAdminPage } from './useAdminPage';
@@ -12,33 +17,47 @@ const MESSAGES = {
   'auth/user-disabled': 'This account has been disabled.',
   'auth/too-many-requests': 'Too many attempts. Wait a few minutes, or reset your password.',
   'auth/network-request-failed': 'Couldn’t reach the server. Check your connection and try again.',
+  'auth/email-already-in-use': 'An account with this email already exists — sign in instead.',
+  'auth/weak-password': 'Choose a password of at least 8 characters.',
+  'auth/operation-not-allowed': 'New accounts are switched off. Ask an admin to create yours.',
 };
 
 export default function Login() {
-  useAdminPage('Sign in | Medibytes Admin');
-  const user = useAuthUser();
+  const [mode, setMode] = useState('signin'); // signin | signup
+  const signup = mode === 'signup';
+  useAdminPage(signup ? 'Create account | Medibytes Admin' : 'Sign in | Medibytes Admin');
+  const { user } = useAuthUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
-  useEffect(() => setError(''), [email, password]);
+  useEffect(() => setError(''), [email, password, mode]);
 
   if (user) return <Navigate to="/admin" replace />;
 
-  const signIn = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     if (!email.trim() || !password) {
       setError('Enter your email and password.');
       return;
     }
+    if (signup && password.length < 8) {
+      setError(MESSAGES['auth/weak-password']);
+      return;
+    }
     setBusy(true);
     setNotice('');
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      if (signup) {
+        const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
+        await sendEmailVerification(cred.user);
+      } else {
+        await signInWithEmailAndPassword(auth, email.trim(), password);
+      }
     } catch (err) {
-      setError(MESSAGES[err.code] ?? 'Sign-in failed. Please try again.');
+      setError(MESSAGES[err.code] ?? 'That didn’t work. Please try again.');
       setBusy(false);
     }
   };
@@ -58,12 +77,16 @@ export default function Login() {
 
   return (
     <main id="main" className="adm adm-login">
-      <form className="adm-login-card" onSubmit={signIn} noValidate>
+      <form className="adm-login-card" onSubmit={submit} noValidate>
         <div className="adm-login-mark" aria-hidden="true">
           <LockKeyhole />
         </div>
-        <h1>Medibytes Admin</h1>
-        <p className="adm-sub">Sign in to view website enquiries.</p>
+        <h1>{signup ? 'Create your account' : 'Medibytes Admin'}</h1>
+        <p className="adm-sub">
+          {signup
+            ? 'Use the email an admin invited. You’ll verify it before you get access.'
+            : 'Sign in to view website enquiries.'}
+        </p>
 
         <label className="adm-field">
           <span>Email</span>
@@ -77,10 +100,10 @@ export default function Login() {
           />
         </label>
         <label className="adm-field">
-          <span>Password</span>
+          <span>Password{signup && <small> (8+ characters)</small>}</span>
           <input
             type="password"
-            autoComplete="current-password"
+            autoComplete={signup ? 'new-password' : 'current-password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -97,12 +120,28 @@ export default function Login() {
           </p>
         )}
 
-        <button type="submit" className="adm-btn adm-btn-primary adm-btn-block" disabled={busy || user === undefined}>
-          {busy ? 'Signing in…' : 'Sign in'}
+        <button
+          type="submit"
+          className="adm-btn adm-btn-primary adm-btn-block"
+          disabled={busy || user === undefined}
+        >
+          {busy ? 'Please wait…' : signup ? 'Create account' : 'Sign in'}
         </button>
-        <button type="button" className="adm-link" onClick={resetPassword}>
-          Forgot password?
-        </button>
+        {!signup && (
+          <button type="button" className="adm-link" onClick={resetPassword}>
+            Forgot password?
+          </button>
+        )}
+        <p className="adm-switch">
+          {signup ? 'Already have an account?' : 'Invited to the team?'}{' '}
+          <button
+            type="button"
+            className="adm-link"
+            onClick={() => setMode(signup ? 'signin' : 'signup')}
+          >
+            {signup ? 'Sign in' : 'Create an account'}
+          </button>
+        </p>
       </form>
     </main>
   );

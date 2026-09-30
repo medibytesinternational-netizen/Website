@@ -140,6 +140,7 @@ export default function App() {
       <Suspense fallback={<main id="main" style={{ minHeight: '60vh' }} />}>
         <Routes>
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/team" element={<AdminDashboard section="team" />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
