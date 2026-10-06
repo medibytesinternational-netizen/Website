@@ -18,5 +18,23 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+/**
+ * False when the VITE_FIREBASE_* env vars were missing at build time (e.g. a
+ * hosting deploy where they were never added). Admin screens check this and
+ * render a readable "unavailable" state instead of hanging on Loading.
+ */
+export const firebaseConfigured = Boolean(
+  firebaseConfig.apiKey && firebaseConfig.projectId
+);
+
+let firebaseApp = null;
+if (firebaseConfigured) {
+  try {
+    firebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  } catch {
+    firebaseApp = null;
+  }
+}
+
+export const app = firebaseApp;
+export const db = firebaseApp ? getFirestore(firebaseApp) : null;

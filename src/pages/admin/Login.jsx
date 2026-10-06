@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { LockKeyhole } from 'lucide-react';
-import { auth, useAuthUser } from '../../lib/auth';
+import { auth, firebaseConfigured, useAuthUser } from '../../lib/auth';
 import { useAdminPage } from './useAdminPage';
 import './admin.css';
 
@@ -32,6 +32,21 @@ export default function Login() {
   useEffect(() => setError(''), [email, password]);
 
   if (user) return <Navigate to="/admin" replace />;
+
+  if (!firebaseConfigured) {
+    return (
+      <main id="main" className="adm adm-center">
+        <div className="adm-panel adm-empty" role="alert">
+          <h2>Admin isn’t connected</h2>
+          <p>
+            This deployment was built without its Firebase configuration, so sign-in can’t
+            reach the server. Add the <strong>VITE_FIREBASE_*</strong> variables to the
+            hosting dashboard and redeploy — no code change needed.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   const submit = async (e) => {
     e.preventDefault();

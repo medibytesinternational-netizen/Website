@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Navigate, NavLink } from 'react-router-dom';
 import { sendEmailVerification, signOut } from 'firebase/auth';
 import { LogOut, MailCheck } from 'lucide-react';
-import { auth, useAuthUser } from '../../lib/auth';
+import { auth, firebaseConfigured, useAuthUser } from '../../lib/auth';
 import { can, ROLE_LABELS, useRole } from '../../lib/roles';
 import { useAdminPage } from './useAdminPage';
 import Enquiries from './Enquiries';
@@ -18,6 +18,19 @@ export default function Dashboard({ section = 'enquiries' }) {
   const { user, version } = useAuthUser();
   const role = useRole(user, version);
 
+  if (!firebaseConfigured)
+    return (
+      <main id="main" className="adm adm-center">
+        <div className="adm-panel adm-empty" role="alert">
+          <h2>Admin isn’t connected</h2>
+          <p>
+            This deployment was built without its Firebase configuration, so enquiries
+            can’t load. Add the <strong>VITE_FIREBASE_*</strong> variables to the hosting
+            dashboard and redeploy — no code change needed.
+          </p>
+        </div>
+      </main>
+    );
   if (user === undefined)
     return (
       <main id="main" className="adm adm-center">
