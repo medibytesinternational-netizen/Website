@@ -371,6 +371,12 @@ export function Footer() {
               >
                 Pause animations
               </button>
+              <Link
+                to="/admin/login"
+                className="text-white/50 hover:text-white/80 transition-colors text-xs text-left w-fit"
+              >
+                Admin login
+              </Link>
             </div>
           </div>
 

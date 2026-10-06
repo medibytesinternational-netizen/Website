@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
@@ -23,9 +21,7 @@ const MESSAGES = {
 };
 
 export default function Login() {
-  const [mode, setMode] = useState('signin'); // signin | signup
-  const signup = mode === 'signup';
-  useAdminPage(signup ? 'Create account | Medibytes Admin' : 'Sign in | Medibytes Admin');
+  useAdminPage('Sign in | Medibytes Admin');
   const { user } = useAuthUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,7 +29,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
-  useEffect(() => setError(''), [email, password, mode]);
+  useEffect(() => setError(''), [email, password]);
 
   if (user) return <Navigate to="/admin" replace />;
 
@@ -43,19 +39,10 @@ export default function Login() {
       setError('Enter your email and password.');
       return;
     }
-    if (signup && password.length < 8) {
-      setError(MESSAGES['auth/weak-password']);
-      return;
-    }
     setBusy(true);
     setNotice('');
     try {
-      if (signup) {
-        const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
-        await sendEmailVerification(cred.user);
-      } else {
-        await signInWithEmailAndPassword(auth, email.trim(), password);
-      }
+      await signInWithEmailAndPassword(auth, email.trim(), password);
     } catch (err) {
       setError(MESSAGES[err.code] ?? 'That didn’t work. Please try again.');
       setBusy(false);
@@ -81,12 +68,8 @@ export default function Login() {
         <div className="adm-login-mark" aria-hidden="true">
           <LockKeyhole />
         </div>
-        <h1>{signup ? 'Create your account' : 'Medibytes Admin'}</h1>
-        <p className="adm-sub">
-          {signup
-            ? 'Use the email an admin invited. You’ll verify it before you get access.'
-            : 'Sign in to view website enquiries.'}
-        </p>
+        <h1>Medibytes Admin</h1>
+        <p className="adm-sub">Sign in to view website enquiries.</p>
 
         <label className="adm-field">
           <span>Email</span>
@@ -100,10 +83,10 @@ export default function Login() {
           />
         </label>
         <label className="adm-field">
-          <span>Password{signup && <small> (8+ characters)</small>}</span>
+          <span>Password</span>
           <input
             type="password"
-            autoComplete={signup ? 'new-password' : 'current-password'}
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -125,23 +108,11 @@ export default function Login() {
           className="adm-btn adm-btn-primary adm-btn-block"
           disabled={busy || user === undefined}
         >
-          {busy ? 'Please wait…' : signup ? 'Create account' : 'Sign in'}
+          {busy ? 'Please wait…' : 'Sign in'}
         </button>
-        {!signup && (
-          <button type="button" className="adm-link" onClick={resetPassword}>
-            Forgot password?
-          </button>
-        )}
-        <p className="adm-switch">
-          {signup ? 'Already have an account?' : 'Invited to the team?'}{' '}
-          <button
-            type="button"
-            className="adm-link"
-            onClick={() => setMode(signup ? 'signin' : 'signup')}
-          >
-            {signup ? 'Sign in' : 'Create an account'}
-          </button>
-        </p>
+        <button type="button" className="adm-link" onClick={resetPassword}>
+          Forgot password?
+        </button>
       </form>
     </main>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useRef, Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Layout from './components/Layout';
@@ -17,6 +17,7 @@ const About = lazy(() => import('./pages/About'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Demo = lazy(() => import('./pages/Demo'));
 const Founders = lazy(() => import('./pages/Founders'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
 
@@ -116,22 +117,6 @@ function ScrollManager() {
   }, [pathname]);
 
   return null;
-}
-
-function NotFound() {
-  return (
-    <main
-      id="main"
-      className="container"
-      style={{ paddingTop: 150, paddingBottom: 80, textAlign: 'center' }}
-    >
-      <h1>Page not found</h1>
-      <p>The page you asked for does not exist.</p>
-      <Link className="button primary" to="/" style={{ marginTop: 24 }}>
-        Back to home
-      </Link>
-    </main>
-  );
 }
 
 export default function App() {
