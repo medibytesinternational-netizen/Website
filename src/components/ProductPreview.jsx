@@ -126,7 +126,7 @@ export default function ProductPreview() {
               <span>
                 <Icon name="stethoscope" /> OPD consultation
               </span>
-              <span>English + Hindi</span>
+              <span>English + Hindi + Tamil</span>
             </div>
             <div className="audio-box">
               <div className="audio-top">

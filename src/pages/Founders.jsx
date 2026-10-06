@@ -20,12 +20,11 @@ const FOUNDERS = [
       'His vision extends far beyond better hospital software. He aims to build a healthcare ecosystem where technology works quietly in the background, giving doctors and nurses more time to think, care, and heal.',
       'MediBytes is more than a company. It is his attempt to build something entirely his own — and transform healthcare while doing it.',
     ],
-    signature: 'Adhwaith',
   },
   {
     id: 'vaibhav',
     name: 'Mr. Vaibhav Govindan',
-    role: 'Co-Founder & Angel Investor',
+    role: 'Founder & Angel Investor',
     photo: '/founders/vaibhav',
     size: [440, 550],
     quote: 'But who’s thinking about them?',
@@ -35,7 +34,6 @@ const FOUNDERS = [
       'And one such segment of people are the ones in healthcare. Nurses, doctors, and various medical professionals work round the clock to give their all to treating patients. But who’s thinking about them?',
       'Medibytes is an AI-integrated app which in very basic terms is going to be used in hospitals — not only to provide a better ecosystem, but to ease the burden of such people in their working environment. We may not be changing the world as of now, but we can change the world a little for the better for someone out there through Medibytes.',
     ],
-    signature: 'Vaibhav',
   },
   {
     id: 'giridharan',
@@ -50,7 +48,6 @@ const FOUNDERS = [
       'Working closely with businesses gave him a deeper understanding of how technology can transform complex, everyday operations. Healthcare became a natural extension of that journey — an industry where operational complexity, fragmented systems, and manual workflows create an even greater need for better technology.',
       'This experience became the foundation for MediBytes. Bringing together his background in technology, product, business, and growth with a multidisciplinary healthcare and AI team, he is now focused on building smarter, connected, and AI-powered infrastructure for modern hospitals.',
     ],
-    signature: 'Giridharan',
   },
 ];
 
@@ -153,9 +150,6 @@ function FounderChapter({ founder, i }) {
             </p>
           ))}
         </div>
-        <p className="fd-sign reveal">
-          <span>Signed,</span> {founder.signature}
-        </p>
       </div>
     </article>
   );

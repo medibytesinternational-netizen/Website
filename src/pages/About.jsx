@@ -109,7 +109,7 @@ export default function About() {
           [
             'stethoscope',
             'Respect the Provider',
-            "A doctor's time is incredibly valuable. Every feature we launch has to shave minutes off their daily workload. The technology serves the medical staff, period.",
+            "A doctor's time is incredibly valuable. Every feature we launch has to save minutes off their daily workload. The technology serves the medical staff, period.",
           ],
           [
             'shield-check',
@@ -124,12 +124,6 @@ export default function About() {
         ]}
         caption="Hospital executives reviewing practical efficiency metrics."
       />
-      <div className="container reveal" style={{ marginTop: -60, paddingBottom: 60 }}>
-        <Link className="text-button" to="/hospitals#deployment">
-          See How We Protect Data <ArrowRight aria-hidden="true" />
-        </Link>
-      </div>
-
       <ClosingCta
         eyebrow="PARTNER WITH US"
         title="Ready to rethink your hospital operations?"

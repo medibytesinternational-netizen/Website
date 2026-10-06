@@ -1,0 +1,288 @@
+/* ─────────────────────────────────────────────────────────────
+   Home: "Smart tools tailored for every floor." Scoped under .ms.
+   Left rail of modules + a detail panel that swaps on select.
+   ───────────────────────────────────────────────────────────── */
+
+.ms {
+  --ms-ink: #0f2a4d;
+  --ms-muted: #3a5a8c;
+  --ms-soft: #6a86b0;
+  --ms-primary: #2f5aa8;
+  --ms-line: #b3d9ff;
+  --ms-hair: rgba(47, 90, 168, 0.14);
+  --ms-surface: #ffffff;
+  --ms-wash: #f4f9ff;
+  --ms-tint: #e3eefd;
+  --ms-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--ms-ink);
+}
+
+.ms-shell {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) 1fr;
+  gap: 28px;
+  margin-top: 48px;
+  align-items: start;
+}
+
+/* ---------- Left rail ---------- */
+
+.ms-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--ms-line);
+  border-radius: 20px;
+  background: var(--ms-surface);
+  padding: 12px;
+  box-shadow: 0 18px 50px var(--ms-hair);
+  position: sticky;
+  top: 110px;
+}
+
+.ms-tab {
+  display: grid;
+  grid-template-columns: 38px 1fr 16px;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  padding: 14px 16px;
+  text-align: left;
+  font: inherit;
+  color: var(--ms-muted);
+  cursor: pointer;
+  transition:
+    background 0.35s var(--ms-ease),
+    color 0.35s var(--ms-ease);
+}
+
+.ms-tab:hover {
+  background: var(--ms-wash);
+  color: var(--ms-ink);
+}
+
+.ms-tab:focus-visible {
+  outline: 2px solid var(--ms-primary);
+  outline-offset: 2px;
+}
+
+.ms-tab[aria-selected='true'] {
+  background: var(--ms-tint);
+  color: var(--ms-ink);
+}
+
+.ms-tab-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  border: 1px solid var(--ms-line);
+  background: var(--ms-wash);
+  color: var(--ms-primary);
+  transition:
+    background 0.35s var(--ms-ease),
+    color 0.35s var(--ms-ease);
+}
+
+.ms-tab-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ms-tab[aria-selected='true'] .ms-tab-icon {
+  background: var(--ms-primary);
+  border-color: var(--ms-primary);
+  color: #fff;
+}
+
+.ms-tab-text {
+  min-width: 0;
+}
+
+.ms-tab-kicker {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ms-soft);
+  margin-bottom: 3px;
+}
+
+.ms-tab-title {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.ms-tab-mark {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ms-line);
+  justify-self: end;
+  transition:
+    background 0.35s var(--ms-ease),
+    transform 0.35s var(--ms-ease);
+}
+
+.ms-tab[aria-selected='true'] .ms-tab-mark {
+  background: var(--ms-primary);
+  transform: scale(1.5);
+}
+
+/* ---------- Detail panel ---------- */
+
+.ms-panel {
+  position: relative;
+  border: 1px solid var(--ms-line);
+  border-radius: 24px;
+  background-color: var(--ms-surface);
+  background-image: url(/cards-bg.svg);
+  background-size: cover;
+  background-position: center;
+  padding: clamp(28px, 4vw, 52px);
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 18px 50px var(--ms-hair);
+  overflow: hidden;
+}
+
+.ms-panel::after {
+  content: '';
+  position: absolute;
+  inset: auto -80px -120px auto;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(47, 90, 168, 0.1), transparent 70%);
+  pointer-events: none;
+}
+
+.ms-panel-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  animation: ms-swap 0.45s var(--ms-ease) both;
+}
+
+@keyframes ms-swap {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ms-panel-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ms-primary);
+}
+
+.ms-panel-top svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ms-panel h3 {
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.12;
+  margin: 20px 0 16px;
+  max-width: 15ch;
+}
+
+.ms-panel p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ms-muted);
+  max-width: 54ch;
+}
+
+.ms-panel-count {
+  margin-top: auto;
+  padding-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--ms-line);
+}
+
+.ms-panel-index {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--ms-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1000px) {
+  .ms-shell {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .ms-rail {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 4px;
+    padding: 10px;
+  }
+  .ms-tab {
+    grid-template-columns: 34px 1fr;
+    padding: 12px 14px;
+  }
+  .ms-tab-mark {
+    display: none;
+  }
+  .ms-panel {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .ms-shell {
+    margin-top: 32px;
+  }
+  .ms-rail {
+    grid-template-columns: 1fr;
+  }
+  .ms-panel h3 {
+    max-width: none;
+  }
+  .ms-panel-count {
+    padding-top: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-panel-body {
+    animation: none;
+  }
+  .ms-tab,
+  .ms-tab-icon,
+  .ms-tab-mark {
+    transition: none;
+  }
+}
+
+.motion-paused .ms-panel-body {
+  animation: none;
+}

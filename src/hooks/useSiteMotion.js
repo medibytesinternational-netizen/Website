@@ -168,14 +168,6 @@ export function useSiteMotion({ pinWorkflow = false, scrubVision = false, heroIn
         if (pinWorkflow && document.querySelector('.workflow-heading')) {
           mmRef.current = gsap.matchMedia();
           mmRef.current.add('(min-width: 1000px)', () => {
-            ScrollTrigger.create({
-              trigger: '.workflow-heading',
-              start: 'top 150px',
-              endTrigger: '.workflow-steps',
-              end: 'bottom 600px',
-              pin: true,
-              pinSpacing: false,
-            });
             gsap.fromTo(
               '.workflow-progress span',
               { scaleX: 0 },
@@ -193,10 +185,11 @@ export function useSiteMotion({ pinWorkflow = false, scrubVision = false, heroIn
           });
           gsap.utils.toArray('.workflow-step').forEach((el) =>
             gsap.from(el, {
-              opacity: 0.25,
+              opacity: 0,
               y: 25,
               duration: 0.7,
-              scrollTrigger: { trigger: el, start: 'top 85%', end: 'top 48%', scrub: 0.5 },
+              ease: 'power2.out',
+              scrollTrigger: { trigger: el, start: 'top 88%', once: true },
             })
           );
         }

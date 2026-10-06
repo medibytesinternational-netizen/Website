@@ -28,7 +28,6 @@ const PRODUCT_LINKS = [
 const COMPANY_LINKS = [
   ['About us', '/about'],
   ["Founder's story", '/founders'],
-  ['Careers', '/careers'],
   ['Contact us', '/contact'],
 ];
 
@@ -273,7 +272,6 @@ const FOOT_LINKS = [
       ['Features', '/features'],
       ['How it works', '/how-it-works'],
       ['For hospitals', '/hospitals'],
-      ['Clinical Intelligence', '/features/clinical'],
       ['Book a walkthrough', '/demo'],
     ],
   },
@@ -282,7 +280,6 @@ const FOOT_LINKS = [
     links: [
       ['About us', '/about'],
       ["Founder's story", '/founders'],
-      ['Careers', '/careers'],
       ['Contact us', '/contact'],
     ],
   },

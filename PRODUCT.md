@@ -2,7 +2,7 @@
 
 Register: brand. An AI documentation layer for Indian hospitals, presented to hospital leadership, clinicians and prospective investors. Doctors dictate; structured, claim-ready clinical documents appear, with every field traceable to the original audio and mandatory human review before anything is filed.
 
-Positioning: layers over the hospital's existing HMIS — no data migration, no replacement system. Languages: Indian-accented clinical English and Tamil, with mixed-language speech. Deployment: cloud or inside the hospital's own infrastructure, with an offline queue for unreliable connectivity.
+Positioning: layers over the hospital's existing HMIS — no data migration, no replacement system. Languages: Indian-accented clinical English, Hindi and Tamil, with mixed-language speech (Hinglish and Tanglish). Deployment: cloud or inside the hospital's own infrastructure, with an offline queue for unreliable connectivity.
 
 Voice: precise, calm, optimistic, plain-spoken about what is and is not built yet.
 

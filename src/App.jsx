@@ -12,7 +12,8 @@ const Features = lazy(() => import('./pages/Features'));
 const FeaturePillar = lazy(() => import('./pages/FeaturePillar'));
 const Hospitals = lazy(() => import('./pages/Hospitals'));
 const About = lazy(() => import('./pages/About'));
-const Careers = lazy(() => import('./pages/Careers'));
+// Careers page hidden — import kept for future re-enable
+// const Careers = lazy(() => import('./pages/Careers'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Demo = lazy(() => import('./pages/Demo'));
 const Founders = lazy(() => import('./pages/Founders'));
@@ -149,7 +150,8 @@ export default function App() {
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/hospitals" element={<Hospitals />} />
             <Route path="/about" element={<About />} />
-            <Route path="/careers" element={<Careers />} />
+            {/* Careers page hidden — route disabled, direct visits fall through to NotFound */}
+            {/* <Route path="/careers" element={<Careers />} /> */}
             <Route path="/contact" element={<Contact />} />
             <Route path="/demo" element={<Demo />} />
             <Route path="/founders" element={<Founders />} />

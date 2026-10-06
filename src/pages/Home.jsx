@@ -16,7 +16,7 @@ const MODULES = [
     title: 'OPD Documentation',
     copy: 'Keep busy outpatient clinics moving. Quick notes and patient histories captured by voice, between one patient and the next.',
     cta: 'Explore OPD',
-    to: '/hospitals',
+    to: '/features/opd',
   },
   {
     icon: 'file-text',
@@ -24,7 +24,7 @@ const MODULES = [
     title: 'IPD Documentation',
     copy: 'Progress logs, care plans, shift handovers and discharge summaries — dictated once, structured into the template each one needs.',
     cta: 'Explore IPD',
-    to: '/hospitals',
+    to: '/features/ipd',
   },
   {
     icon: 'shield-check',
@@ -32,7 +32,7 @@ const MODULES = [
     title: 'Clinical Intelligence',
     copy: 'Surfaces possible drug interactions and logical inconsistencies for the clinician to review. The call stays yours.',
     cta: 'Explore Clinical AI',
-    to: '/how-it-works#platform',
+    to: '/features/clinical',
   },
   {
     icon: 'scan-line',
@@ -40,7 +40,7 @@ const MODULES = [
     title: 'OCR & External Documents',
     copy: 'Stop retyping third-party lab results. Pull the text out of physical scans and uploaded PDFs and into the record.',
     cta: 'Explore OCR',
-    to: '/how-it-works#platform',
+    to: '/features/documents',
   },
   {
     icon: 'lock-keyhole',
@@ -48,7 +48,7 @@ const MODULES = [
     title: 'Insurance Intelligence',
     copy: 'Cross-field checks that flag mismatched or missing diagnostic codes before anything is submitted.',
     cta: 'Explore Insurance AI',
-    to: '/how-it-works#platform',
+    to: '/features/insurance',
   },
 ];
 
@@ -63,7 +63,7 @@ const EXEC_FAQ = [
   ],
   [
     'Will language barriers break the dictation?',
-    'It is built for clinical terminology spoken in Indian-accented English and Tamil, including mixed English-Tamil speech. We evaluate quality separately for each language, and we will show you honestly where it holds up and where it does not yet.',
+    'It is built for clinical terminology spoken in Indian-accented English, Hindi and Tamil, including mixed Hinglish and Tanglish speech. We evaluate quality separately for each language and mixed-language workflow, and we will show you honestly where it holds up and where it does not yet.',
   ],
   [
     'What happens when the internet drops?',
@@ -94,8 +94,8 @@ export default function Home() {
                 <span className="status-dot"></span> AI FOR DOCUMENTATION
             </div>
             <h1 id="hero-heading">
-              <span className="headline-line">Speak. We document.</span>
-              <span className="headline-line green">You always sign off.</span>
+              <span className="headline-line">Talk. We do the paperwork.</span>
+              <span className="headline-line green">You care for patients.</span>
             </h1>
             <p className="hero-in">
               Medibytes layers over your existing HMIS — no migration, no new system to
@@ -111,7 +111,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="hero-footnote hero-in">
-              <span className="tiny-line"></span> Tamil &amp; Indian-accented English · Wraps your
+              <span className="tiny-line"></span> Tamil, Hindi &amp; Indian-accented English · Wraps your
               existing HMIS · Cloud or on-premise
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function Home() {
             <p className="reveal">
               There are no data migrations. Nothing legacy gets ripped out. We make your current
               infrastructure listen: the software captures physician dictation — built for
-              Indian-accented English and Tamil, including the way clinicians switch between them —
+              Indian-accented English, Hindi and Tamil, including the way clinicians switch between them —
               and maps it into structured medical files a clinician then reviews and signs.
             </p>
             <div className="teaser-cta reveal">

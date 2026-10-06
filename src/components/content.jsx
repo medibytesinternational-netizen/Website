@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Icon } from './icons';
-import ScrollStack, { ScrollStackItem } from './ScrollStack';
 import BackgroundVideo from './BackgroundVideo';
+import '../module-showcase.css';
 import { CONTACT_EMAIL } from '../config/site';
 import { enquiriesEnabled, saveEnquiry } from '../lib/enquiries';
 
@@ -115,10 +115,13 @@ export function ModuleGrid({ eyebrow, title, copy, modules }) {
   );
 }
 
-/* ---------- Module scroll-stack (same modules, stacked cards on scroll) ---------- */
+/* ---------- Module showcase (rail of modules + swapping detail panel) ---------- */
 export function ModuleStack({ eyebrow, title, copy, modules }) {
+  const [active, setActive] = useState(0);
+  const current = modules[active];
+
   return (
-    <section className="platform-teaser container section">
+    <section className="platform-teaser container section ms">
       <div className="section-intro reveal">
         <div className="eyebrow">{eyebrow}</div>
         <div className="intro-row">
@@ -126,31 +129,71 @@ export function ModuleStack({ eyebrow, title, copy, modules }) {
           <p>{copy}</p>
         </div>
       </div>
-      <ScrollStack
-        useWindowScroll
-        itemDistance="40vh"
-        itemScale={0.04}
-        itemStackDistance={48}
-        stackPosition="22%"
-        scaleEndPosition="12%"
-        baseScale={0.88}
-      >
-        {modules.map((m) => (
-          <ScrollStackItem key={m.title} itemClassName="module-stack-card">
-            <div className="card-top">
-              <Icon name={m.icon} />
-              <span>{m.kicker}</span>
+
+      <div className="ms-shell reveal">
+        <div className="ms-rail" role="tablist" aria-label="Platform modules">
+          {modules.map((m, i) => (
+            <button
+              key={m.title}
+              type="button"
+              role="tab"
+              id={`ms-tab-${i}`}
+              aria-selected={i === active}
+              aria-controls="ms-panel"
+              tabIndex={i === active ? 0 : -1}
+              className="ms-tab"
+              onClick={() => setActive(i)}
+              onMouseEnter={() => setActive(i)}
+              onFocus={() => setActive(i)}
+              onKeyDown={(e) => {
+                const next =
+                  e.key === 'ArrowDown' || e.key === 'ArrowRight'
+                    ? (active + 1) % modules.length
+                    : e.key === 'ArrowUp' || e.key === 'ArrowLeft'
+                      ? (active - 1 + modules.length) % modules.length
+                      : null;
+                if (next === null) return;
+                e.preventDefault();
+                setActive(next);
+                document.getElementById(`ms-tab-${next}`)?.focus();
+              }}
+            >
+              <span className="ms-tab-icon">
+                <Icon name={m.icon} />
+              </span>
+              <span className="ms-tab-text">
+                <span className="ms-tab-kicker">{m.kicker}</span>
+                <span className="ms-tab-title">{m.title}</span>
+              </span>
+              <span className="ms-tab-mark" aria-hidden="true" />
+            </button>
+          ))}
+        </div>
+
+        <div
+          className="ms-panel"
+          id="ms-panel"
+          role="tabpanel"
+          aria-labelledby={`ms-tab-${active}`}
+        >
+          <div className="ms-panel-body" key={current.title}>
+            <div className="ms-panel-top">
+              <Icon name={current.icon} />
+              <span>{current.kicker}</span>
             </div>
-            <h3>{m.title}</h3>
-            <p>{m.copy}</p>
-            <div className="teaser-cta">
-              <Link className="text-button" to={m.to}>
-                {m.cta} <ArrowRight aria-hidden="true" />
+            <h3>{current.title}</h3>
+            <p>{current.copy}</p>
+            <div className="ms-panel-count">
+              <Link className="text-button" to={current.to}>
+                {current.cta} <ArrowRight aria-hidden="true" />
               </Link>
+              <span className="ms-panel-index">
+                {String(active + 1).padStart(2, '0')} / {String(modules.length).padStart(2, '0')}
+              </span>
             </div>
-          </ScrollStackItem>
-        ))}
-      </ScrollStack>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

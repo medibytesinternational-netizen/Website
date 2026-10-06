@@ -26,7 +26,7 @@ const DEMO_FAQ = [
   ],
   [
     'Can it handle heavy regional accents?',
-    'Indian-accented clinical English and Tamil are core design targets, including mixed English-Tamil speech. We will show you where it stands today and where it does not yet hold up.',
+    'Indian-accented clinical English, Hindi and Tamil are core design targets, including mixed Hinglish and Tanglish speech. We will show you where it stands today and where it does not yet hold up.',
   ],
   [
     'How do you handle data privacy?',

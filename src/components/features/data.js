@@ -32,7 +32,7 @@ export const PILLARS = [
     summary: 'Outpatient clinical documentation.',
     card: 'Turn consultations into structured clinical documentation while clinicians stay focused on the patient.',
     flow: ['Consultation', 'Structured Documentation'],
-    headline: ['Less typing.', 'More medicine.'],
+    headline: ['Stay with the patient.', 'We handle the documentation.'],
     lead: 'MediBytes helps clinicians convert consultations into structured clinical documentation while they focus on the patient.',
     body: 'The platform can capture relevant clinical information from consultations and assist in generating structured notes that fit into the hospital’s existing workflow.',
     Visual: OpdVisual,
@@ -116,6 +116,9 @@ export const PILLARS = [
         inline: true,
       },
     ],
+    statement: {
+      text: 'One stay. One continuous record from admission to discharge.',
+    },
   },
   {
     slug: 'clinical',
